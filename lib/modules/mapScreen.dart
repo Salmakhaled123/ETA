@@ -36,7 +36,7 @@ class MapScreen extends StatelessWidget
               style: TextStyle(color: Colors.white),
             ),
           ),
-          drawer: DrawerPart(),
+          drawer: DrawerPart(uId: uId!,mode: mode!),
           body: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [

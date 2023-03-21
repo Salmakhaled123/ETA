@@ -159,4 +159,72 @@ class LocationCubit extends Cubit<LocationStates> {
     appeared = false;
     emit(ButtonDisappeared());
   }
+  List<ServiceItem> services =
+  [
+    ServiceItem(
+        name: 'Tow Truck', image: 'assets/new-tow.png', isClicked: false),
+    ServiceItem(name: 'winch',
+        image: 'assets/new-win.png', isClicked: false),
+    ServiceItem(
+        name: 'Emergency',
+        image: 'assets/front-line (1).png',
+        isClicked: false),
+    ServiceItem(
+        name: 'First Aid',
+        image: 'assets/first-aid-kit (1).png',
+        isClicked: false),
+    ServiceItem(name: 'Fuel',
+        image: 'assets/fuel.png', isClicked: false),
+    ServiceItem(
+        name: 'JumpStart', image: 'assets/battery.png', isClicked: false),
+    ServiceItem(name: 'Key Lockout',
+        image: 'assets/key.png', isClicked: false),
+    ServiceItem(name: 'Tire Change',
+        image: 'assets/tire.png', isClicked: false)
+  ];
+  List<ServiceItem>emergencyItems=
+  [
+    ServiceItem(name: 'Fire Stations', image: 'assets/fire-truck.png', isClicked: false),
+    ServiceItem(name: 'Hospitals', image: 'assets/hospital.png', isClicked: false),
+    ServiceItem(name: 'Police Stations', image:'assets/police-station.png', isClicked: false)
+  ];
+  List<ServiceItem>servicesClicked=[];
+  bool isServiceClicked(ServiceItem model,uId,serviceName)
+  {
+    model.isClicked=!model.isClicked;
+
+    if(model.isClicked==true )
+    {
+      servicesClicked.add(model);
+      FirebaseFirestore.instance.collection('provider').doc(uId).set({'services':FieldValue.arrayUnion([serviceName])},SetOptions(merge: true));
+    }
+    else if(model.isClicked==false && servicesClicked.contains(model))
+    {
+      servicesClicked.remove(model);
+      FirebaseFirestore.instance.collection('provider').doc(uId).set({'services':FieldValue.arrayRemove([serviceName])},SetOptions(merge: true));
+    }
+
+    print(model.isClicked);
+    print(servicesClicked.length);
+    emit(ServiceClickedSuccessfully());
+
+    return model.isClicked;
+  }
+  void removeService(model,uId,serviceName)
+  {
+    servicesClicked.remove(model);
+    FirebaseFirestore.instance.collection('provider').doc(uId).set({'services':FieldValue.arrayRemove([serviceName])},SetOptions(merge: true));
+
+    emit(RemovedSuccessfully());
+  }
+
 }
+class ServiceItem
+{
+  String image;
+  String name;
+  bool isClicked;
+  ServiceItem(
+      {required this.name, required this.image, required this.isClicked});
+}
+

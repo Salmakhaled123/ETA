@@ -262,16 +262,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     response = await signUp();
                     print(response!.user!.uid);
                     print(response!.user!.email);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MapScreen(
-                                  uId: emailController.text,
-                                  mode: modes,
-                                  name: nameController.text,
-                              email: emailController.text,
-                                )),
-                        (route) => false);
+                   if(modes=='provider')
+                     {
+                       Navigator.pushAndRemoveUntil(
+                           context,
+                           MaterialPageRoute(
+                               builder: (context) => MapScreen(
+                                 uId: emailController.text,
+                                 mode: modes,
+                                 name: nameController.text,
+                                 email: emailController.text,
+                               )),
+                               (route) => false);
+                     }
 
                     // That's it to display an alert, use other properties to customize.
                   },

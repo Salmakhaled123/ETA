@@ -8,7 +8,8 @@ import '../cubit/states.dart';
 import '../signIn.dart';
 class DrawerPart extends StatelessWidget
 {
-  DrawerPart();
+  String uId,mode;
+  DrawerPart({required this.mode,required this.uId});
   @override
   Widget build(BuildContext context)
   {

@@ -15,6 +15,8 @@ class ChangeLocation extends LocationStates{}
 class LiveLocation extends LocationStates{}
 class ButtonDisappeared extends LocationStates{}
 class AddPolyline extends LocationStates{}
+class ServiceClickedSuccessfully extends LocationStates{}
+class RemovedSuccessfully extends LocationStates{}
 
 
 
