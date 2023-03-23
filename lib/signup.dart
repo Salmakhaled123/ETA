@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'components/constants.dart';
 import 'modules/mapScreen.dart';
+import 'modules/providermapscreen.dart';
 
 class HomeScreen extends StatefulWidget {
   String? uId;
@@ -244,7 +245,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onChanged: (value) {
                     setState(() {
                       modes = value;
-                      if (modes == 'provider') {
+                      if (modes == 'provider')
+                      {
                         emails.add(emailController.text);
                         modess.add('provider');
                         FirebaseFirestore.instance
@@ -263,6 +265,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     print(response!.user!.uid);
                     print(response!.user!.email);
                    if(modes=='provider')
+                     {
+                       Navigator.pushAndRemoveUntil(
+                           context,
+                           MaterialPageRoute(
+                               builder: (context) => ProviderMapScreen(
+                                 uId: emailController.text,
+                                 mode: modes,
+                               )),
+                               (route) => false);
+                     }
+                   else
                      {
                        Navigator.pushAndRemoveUntil(
                            context,
