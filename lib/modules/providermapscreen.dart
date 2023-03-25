@@ -49,7 +49,7 @@ class ProviderMapScreen extends StatelessWidget {
                   ),
                   onMapCreated: (GoogleMapController controller) async {
                     cubit.mapController1 = controller;
-                    // controller.setMapStyle(cubit.style);
+
                   },
                   markers: cubit.markers,
                 ),

@@ -122,10 +122,29 @@ class LocationCubit extends Cubit<LocationStates> {
 
   bool isDark = false;
   String style = '';
+  changeMood(context)async
+  {
+    isDark=!isDark;
+    emit(ChangeMoodSuccessfully());
+    if(isDark)
+    {
+      style=await DefaultAssetBundle.of(context).loadString('assets/darktheme.json');
+      await mapController1?.setMapStyle(style);
+      emit(DarkMoodSuccessfully());
+    }
+    else
+    {
+      style=await DefaultAssetBundle.of(context).loadString('assets/lighttheme.json');
+      await mapController1?.setMapStyle(style);
+      emit(LightMoodSuccessfully());
+    }
+
+  }
   GoogleMapController? mapController2;
 
   var liveLat;
   var liveLang;
+
   void realTimeTracking(String uId, String service) {
     Geolocator.getPositionStream().listen((event) {
       FirebaseFirestore.instance.collection('providers').doc(uId).set({

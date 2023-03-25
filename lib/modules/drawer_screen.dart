@@ -40,9 +40,7 @@ class DrawerPart extends StatelessWidget
                 value: LocationCubit.get(context).isDark,
                 onChanged: (val)
                 {
-                // val=LocationCubit.get(context).isDark;
-                //    LocationCubit.get(context).changeMood(
-                //     context: context,);
+                cubit.changeMood(context);
                 },
                 title: Text('Theme',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                 activeColor: Colors.teal,

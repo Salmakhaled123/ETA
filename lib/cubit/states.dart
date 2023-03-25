@@ -17,6 +17,11 @@ class ButtonDisappeared extends LocationStates{}
 class AddPolyline extends LocationStates{}
 class ServiceClickedSuccessfully extends LocationStates{}
 class RemovedSuccessfully extends LocationStates{}
+class ChangeMoodSuccessfully extends LocationStates{}
+class DarkMoodSuccessfully extends LocationStates{}
+class LightMoodSuccessfully extends LocationStates{}
+
+
 
 
 
