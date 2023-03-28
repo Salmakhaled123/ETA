@@ -1,16 +1,18 @@
-import 'package:etaproject/signIn.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'cache/shared_pref.dart';
 import 'cubit/bloc_observer.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
+import 'modules/signIn.dart';
 void main()async
 {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   await Firebase.initializeApp();
+  await CacheHelper.init();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent));
 

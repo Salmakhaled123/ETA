@@ -9,16 +9,17 @@ class GetCurrentLocationError extends LocationStates
 }
 class GetPositionSuccess extends LocationStates{}
 class MoodChangesSuccessfully extends LocationStates{}
+class DarkMapMood extends LocationStates{}
+class LightMapMood extends LocationStates{}
 class ChangeLocation extends LocationStates{}
 class LiveLocation extends LocationStates{}
+class ArabicState extends LocationStates{}
 class ButtonDisappeared extends LocationStates{}
 class AddPolyline extends LocationStates{}
 class ServiceClickedSuccessfully extends LocationStates{}
 class RemovedSuccessfully extends LocationStates{}
-class ChangeMoodSuccessfully extends LocationStates{}
-class DarkMoodSuccessfully extends LocationStates{}
-class LightMoodSuccessfully extends LocationStates{}
-
+class EnglishState extends LocationStates{}
+class DirectionsSuccess extends LocationStates{}
 
 
 

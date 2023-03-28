@@ -1,13 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:etaproject/signIn.dart';
+import 'package:etaproject/modules/providermapscreen.dart';
+import 'package:etaproject/modules/signIn.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'components/constants.dart';
-import 'modules/mapScreen.dart';
-import 'modules/providermapscreen.dart';
+import '../cache/shared_pref.dart';
+import '../components/constants.dart';
+import 'mapScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   String? uId;
@@ -19,45 +20,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //var user=FirebaseAuth.instance.currentUser;
-  // Future<UserCredential> signInWithGoogle() async {
-  //   // Trigger the authentication flow
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //   // Obtain the auth details from the request
-  //   final GoogleSignInAuthentication? googleAuth =
-  //   await googleUser?.authentication;
-  //
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth?.accessToken,
-  //     idToken: googleAuth?.idToken,
-  //   );
-  //   print(' access token ${googleAuth!.accessToken}');
-  //   print('id token ${googleAuth.idToken}');
-  //
-  //   // Once signed in, return the UserCredential
-  //   return await FirebaseAuth.instance.signInWithCredential(credential);
-  // }
 
-  // verifyEmail()async
-  // {
-  //   User ? user = FirebaseAuth.instance.currentUser;
-  //
-  //   if (user!= null && !user.emailVerified) {
-  //     await user.sendEmailVerification();
-  //     QuickAlert.show(text: 'check your inbox for verification',
-  //       context: context,
-  //       type: QuickAlertType.info,
-  //     );
-  //   }
-  // }
 
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passController = TextEditingController();
   bool isObscure = false;
 
-  UserCredential? response;
+late  UserCredential response;
   dynamic modes;
   GoogleMapController? mapController1;
   var currentLocation;
@@ -245,8 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onChanged: (value) {
                     setState(() {
                       modes = value;
-                      if (modes == 'provider')
-                      {
+                      if (modes == 'provider') {
                         emails.add(emailController.text);
                         modess.add('provider');
                         FirebaseFirestore.instance
@@ -260,34 +229,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   }),
               ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () async
+                  {
                     response = await signUp();
-                    print(response!.user!.uid);
-                    print(response!.user!.email);
-                   if(modes=='provider')
-                     {
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(
-                               builder: (context) => ProviderMapScreen(
-                                 uId: emailController.text,
-                                 mode: modes,
-                               )),
-                               (route) => false);
-                     }
-                   else
-                     {
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(
-                               builder: (context) => MapScreen(
-                                 uId: emailController.text,
-                                 mode: modes,
-                                 name: nameController.text,
-                                 email: emailController.text,
-                               )),
-                               (route) => false);
-                     }
+
+                    print(response.user!.uid);
+                    print(response.user!.email);
+                    if(modes=='provider')
+                      {
+                        await  CacheHelper.saveStringData(key: 'uIdProvider', value: emailController.text);
+                        await  CacheHelper.saveStringData(key: 'modeProvider', value: modes);
+                        await  CacheHelper.saveStringData(key: 'nameProvider', value: nameController.text);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProviderMapScreen(
+                                  uId: emailController.text,
+                                  mode: modes,
+                                )),
+                                (route) => false);
+                      }
+                    else
+                      {
+                        await  CacheHelper.saveStringData(key: 'uIdUser', value: emailController.text);
+                      await  CacheHelper.saveStringData(key: 'modeUser', value: modes);
+                      await  CacheHelper.saveStringData(key: 'nameUser', value: nameController.text);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapScreen(
+                                  uId: emailController.text,
+                                  mode: modes,
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                )),
+                                (route) => false);
+                      }
 
                     // That's it to display an alert, use other properties to customize.
                   },

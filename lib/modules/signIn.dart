@@ -1,11 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:etaproject/signup.dart';
+import 'package:etaproject/modules/providermapscreen.dart';
+import 'package:etaproject/modules/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
-import 'components/constants.dart';
-import 'modules/mapScreen.dart';
+import '../cache/shared_pref.dart';
+import 'mapScreen.dart';
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -19,7 +19,8 @@ class _LoginScreenState extends State<LoginScreen>
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: emailController.text, password: passController.text);
-        return userCredential;
+        return userCredential
+        ;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           AwesomeDialog(
@@ -142,22 +143,31 @@ class _LoginScreenState extends State<LoginScreen>
               ElevatedButton(
                   onPressed: () async
                   {
-                    String ?moody;
-                   for(int i=0;i<emails.length;i++)
-                     {
-                       if(emails[i]==emailController.text)
-                         {
-                           moody=modess.elementAt(i);
-                         }
-                     }
                     await SignIn();
-                         print(emails.length);
-                         print(modess.length);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MapScreen(mode: moody,
-                          uId:emailController.text,email: emailController.text,)),
-                        (route) => false);
+
+                    String ? modeUser=CacheHelper.getData(key: 'modeUser');
+                    String ?uidUser=CacheHelper.getData(key: 'uIdUser');
+                    String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
+                    String ?uidProvider=CacheHelper.getData(key: 'uIdProvider');
+
+                    if( uidUser==emailController.text)
+                      {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => MapScreen(mode: modeUser,
+                              uId:uidUser,email: emailController.text,)),
+                                (route) => false);
+                      }
+                   else if( uidProvider==emailController.text)
+                     {
+                       Navigator.pushAndRemoveUntil(
+                           context,
+                           MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
+                             uId:uidProvider,)),
+                               (route) => false);
+                     }
+
+
                   },
                   child: Text('Sign in'))
             ]),

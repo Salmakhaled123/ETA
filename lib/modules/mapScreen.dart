@@ -1,9 +1,10 @@
-import 'package:etaproject/cubit/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../components/components.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
+import '../components/constants.dart';
+import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'drawer_screen.dart';
 
@@ -11,12 +12,10 @@ class MapScreen extends StatelessWidget
 {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String ? uId, name, mode, email;
-  MapScreen({this.mode,
+  MapScreen({required this.mode,
        required this.uId,
        this.name,
-      // required this.mode,
        this.email});
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LocationCubit, LocationStates>(
@@ -25,18 +24,17 @@ class MapScreen extends StatelessWidget
         var cubit = LocationCubit.get(context);
         print('uId $uId');
         print('mode $mode');
-        var searchController = TextEditingController();
         double mediaHeight = MediaQuery.of(context).size.height;
         double mediaWidth = MediaQuery.of(context).size.height;
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.teal,
-            title: const Text(
+            title:  Text(
               'My Current Location',
               style: TextStyle(color: Colors.white),
             ),
           ),
-          drawer: DrawerPart(uId: uId!,mode: mode!),
+          drawer: DrawerPart(mode: mode!,uId: uId!),
           body: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
@@ -44,37 +42,63 @@ class MapScreen extends StatelessWidget
                 height: mediaHeight,
                 width: mediaWidth,
                 child: GoogleMap(
+                  polylines:
+                  {
+                    if (cubit.info != null)
+                      Polyline(
+                        polylineId:  PolylineId('overview_polyline'),
+                        color: Colors.black,
+                        width: 3,
+                        points: cubit.info!.polylinePoints
+                            .map((e) => LatLng(e.latitude, e.longitude))
+                            .toList(),
+                      ),
+
+                  },
+
                   mapType: MapType.normal,
                   zoomControlsEnabled: false,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(30.033333, 31.233334),
                     zoom: 15.0,
                   ),
-                  onMapCreated: (GoogleMapController controller) async {
+                  onMapCreated: (GoogleMapController controller) async
+                  {
                     cubit.mapController1 = controller;
-                    // controller.setMapStyle(cubit.style);
                   },
                   markers: cubit.markers,
+
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: defaultFormField(
-                  label: 'Search Places',
-                  prefix: Icons.search,
-                  type: TextInputType.text,
-                  isPassword: false,
-                  controller: searchController,
-                  validate: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'search musn\' t be empty';
-                    }
-                  },
+
+              if (cubit.info != null)
+                Positioned(
+                  top: 20.0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 6.0,
+                      horizontal: 12.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.yellowAccent,
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                          blurRadius: 6.0,
+                        )
+                      ],
+                    ),
+                    child: Text(
+                      '${cubit.info?.totalDistance}, ${cubit.info?.totalDuration}',
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              // SizedBox(
-              //   height: mediaHeight * 0.5,
-              // ),
               Positioned(
                 height: mediaHeight * 0.5,
                 right: 0.0,
@@ -109,7 +133,7 @@ class MapScreen extends StatelessWidget
                                   borderRadius: BorderRadius.circular(50.0)),
                               backgroundColor: Colors.teal),
                           child: Row(
-                            children: const [
+                            children:  [
                               Icon(Icons.arrow_upward_outlined),
                               SizedBox(
                                 width: 5,
@@ -227,7 +251,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children:  [
                                                                         Text(
                                                                             'Tow Truck',
                                                                             style: TextStyle(
@@ -257,6 +281,17 @@ class MapScreen extends StatelessWidget
                                                                     ElevatedButton(
                                                                   onPressed:
                                                                       () {
+                                                                    if(!modess.contains('provider'))
+                                                                      {
+                                                                        QuickAlert.show(context: context,
+                                                                            type: QuickAlertType.error,title: 'Oops...',
+                                                                        text: 'No provider available now ');
+                                                                      }
+                                                                    else
+                                                                      {
+                                                                        cubit.connection();
+                                                                      }
+
                                                                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>RequestScreen(uId: uId,service: 'Tow truck',)));
                                                                   },
                                                                   style: ElevatedButton.styleFrom(
@@ -266,7 +301,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -372,7 +407,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children:  [
                                                                         Text(
                                                                             'Winch',
                                                                             style: TextStyle(
@@ -409,7 +444,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -457,7 +492,8 @@ class MapScreen extends StatelessWidget
                                                       )),
                                                 ), // Winch
                                                 GestureDetector(
-                                                  onTap: () => {
+                                                  onTap: () =>
+                                                  {
                                                     showModalBottomSheet(
                                                       shape: const RoundedRectangleBorder(
                                                           borderRadius:
@@ -525,7 +561,7 @@ class MapScreen extends StatelessWidget
                                                                                         Navigator.pop(context);
                                                                                       },
                                                                                     )),
-                                                                                const SizedBox(
+                                                                                SizedBox(
                                                                                   height: 200,
                                                                                   child: Text("Fire stations near me"),
                                                                                 )
@@ -542,7 +578,7 @@ class MapScreen extends StatelessWidget
                                                                                 const EdgeInsets.all(10),
                                                                             child:
                                                                                 Column(
-                                                                              children: const [
+                                                                              children:  [
                                                                                 SizedBox(
                                                                                     width: 150,
                                                                                     height: 120,
@@ -596,7 +632,7 @@ class MapScreen extends StatelessWidget
                                                                                 const EdgeInsets.all(10),
                                                                             child:
                                                                                 Column(
-                                                                              children: const [
+                                                                              children:  [
                                                                                 SizedBox(
                                                                                     width: 150,
                                                                                     height: 120,
@@ -633,7 +669,7 @@ class MapScreen extends StatelessWidget
                                                                                         Navigator.pop(context);
                                                                                       },
                                                                                     )),
-                                                                                const SizedBox(
+                                                                                 SizedBox(
                                                                                   height: 200,
                                                                                   child: Text("Police stations near me"),
                                                                                 )
@@ -695,7 +731,7 @@ class MapScreen extends StatelessWidget
                                                                 image: AssetImage(
                                                                     'assets/front-line (1).png'),
                                                               )),
-                                                          const Text(
+                                                           Text(
                                                             "Emergency",
                                                             style: TextStyle(
                                                                 fontSize: 18,
@@ -766,7 +802,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children: [
                                                                         Text(
                                                                             'First Aid',
                                                                             style: TextStyle(
@@ -803,7 +839,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -838,7 +874,7 @@ class MapScreen extends StatelessWidget
                                                                 image: AssetImage(
                                                                     'assets/first-aid-kit (1).png'),
                                                               )),
-                                                          const Text(
+                                                           Text(
                                                             "First Aid",
                                                             style: TextStyle(
                                                                 fontSize: 18,
@@ -909,7 +945,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children:  [
                                                                         Text(
                                                                             'Fuel',
                                                                             style: TextStyle(
@@ -946,7 +982,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child: Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -981,7 +1017,7 @@ class MapScreen extends StatelessWidget
                                                                 image: AssetImage(
                                                                     'assets/fuel.png'),
                                                               )),
-                                                          const Text(
+                                                           Text(
                                                             "Fuel",
                                                             style: TextStyle(
                                                                 fontSize: 18,
@@ -1052,7 +1088,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children:  [
                                                                         Text(
                                                                             'JumpStart',
                                                                             style: TextStyle(
@@ -1089,7 +1125,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -1115,7 +1151,7 @@ class MapScreen extends StatelessWidget
                                                                           20.0)),
                                                       color: Colors.white70,
                                                       child: Column(
-                                                        children: const [
+                                                        children:  [
                                                           SizedBox(
                                                               width: 80,
                                                               height: 100,
@@ -1194,7 +1230,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children: [
                                                                         Text(
                                                                             'Key Lockout',
                                                                             style: TextStyle(
@@ -1231,7 +1267,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -1266,7 +1302,7 @@ class MapScreen extends StatelessWidget
                                                                 image: AssetImage(
                                                                     'assets/key.png'),
                                                               )),
-                                                          const Text(
+                                                           Text(
                                                             "Key Lockout",
                                                             style: TextStyle(
                                                                 fontSize: 18,
@@ -1337,7 +1373,7 @@ class MapScreen extends StatelessWidget
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .center,
-                                                                      children: const [
+                                                                      children: [
                                                                         Text(
                                                                             'Tire Change',
                                                                             style: TextStyle(
@@ -1374,7 +1410,7 @@ class MapScreen extends StatelessWidget
                                                                       backgroundColor:
                                                                           Colors
                                                                               .teal),
-                                                                  child: const Text(
+                                                                  child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
                                                                           fontSize:
@@ -1400,7 +1436,7 @@ class MapScreen extends StatelessWidget
                                                                           20.0)),
                                                       color: Colors.white70,
                                                       child: Column(
-                                                        children: const [
+                                                        children: [
                                                           SizedBox(
                                                               width: 80,
                                                               height: 100,
@@ -1440,16 +1476,7 @@ class MapScreen extends StatelessWidget
               ),
             ],
           ),
-          // floatingActionButton: FloatingActionButton(backgroundColor: Colors.teal,
-          //   child: Icon(
-          //     Icons.location_searching,
-          //     color: Colors.white,
-          //   ),
-          //   onPressed: () async {
-          //     cubit.getPosition();
-          //     cubit.getLatAndLong();
-          //   },
-          // ),
+
         );
       },
     );
