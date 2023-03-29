@@ -15,7 +15,6 @@ void main()async
   await CacheHelper.init();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent));
-
   runApp( MyApp());
 }
 

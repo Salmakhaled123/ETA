@@ -105,7 +105,7 @@ class MapScreen extends StatelessWidget
                 top: mediaHeight * 0.3,
                 child: InkWell(
                     onTap: () async {
-                      cubit.getPermission();
+                    await  cubit.getPermission();
                       cubit.getLatAndLong(
                         mode: mode,
                         uId: uId,

@@ -350,11 +350,24 @@ LatLng ?lngUser,lngProvider;
   }
   Directions? info;
 
-  connection()async{
+  connection()async
+  {
+    await FirebaseFirestore.instance.collection('provider').get().then((value)
+    {
+      for (var doc in value.docs)
+      {
+        lngProvider=LatLng(doc.data()['current location'].latitude, doc.data()['current location'].longitude);
+        Marker marker = Marker(icon:  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            markerId: MarkerId('provider'),
+            position: LatLng(doc.data()['current location'].latitude,doc.data()['current location'].longitude),
+            infoWindow: InfoWindow(title: 'provider'));
+        markers.add(marker);
+        // mapController1?.animateCamera(CameraUpdate.newLatLng(lngProvider!));
+        break;
+      } });
     final directions =await DirectionsRepository()
         .getDirections(origin: lngUser!, destination: lngProvider!);
     info = directions;
-    print(info?.polylinePoints.toString());
     emit(DirectionsSuccess());
   }
   void removeService(model, uId, serviceName) {
