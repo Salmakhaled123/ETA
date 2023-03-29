@@ -149,7 +149,8 @@ class _LoginScreenState extends State<LoginScreen>
                     String ?uidUser=CacheHelper.getData(key: 'uIdUser');
                     String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
                     String ?uidProvider=CacheHelper.getData(key: 'uIdProvider');
-
+print(uidProvider);
+print(uidUser);
                     if( uidUser==emailController.text)
                       {
                         Navigator.pushAndRemoveUntil(

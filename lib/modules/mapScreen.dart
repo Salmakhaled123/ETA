@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
-import '../components/constants.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'drawer_screen.dart';
@@ -280,17 +277,10 @@ class MapScreen extends StatelessWidget
                                                                 child:
                                                                     ElevatedButton(
                                                                   onPressed:
-                                                                      () {
-                                                                    if(!modess.contains('provider'))
-                                                                      {
-                                                                        QuickAlert.show(context: context,
-                                                                            type: QuickAlertType.error,title: 'Oops...',
-                                                                        text: 'No provider available now ');
-                                                                      }
-                                                                    else
-                                                                      {
-                                                                        cubit.connection();
-                                                                      }
+                                                                      () async{
+
+                                                                       await cubit.connection();
+
 
                                                                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>RequestScreen(uId: uId,service: 'Tow truck',)));
                                                                   },

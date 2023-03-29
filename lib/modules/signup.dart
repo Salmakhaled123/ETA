@@ -1,13 +1,12 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:etaproject/cubit/cubit.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signIn.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../cache/shared_pref.dart';
-import '../components/constants.dart';
 import 'mapScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -190,21 +189,11 @@ late  UserCredential response;
                   groupValue: modes,
                   onChanged: (value)
                   {
-                    setState(() {
+                    setState(()
+                    {
                       modes = value;
                       print(modes);
-                      if (modes == 'user')
-                      {
-                        emails.add(emailController.text);
-                        modess.add('user');
-                        FirebaseFirestore.instance
-                            .collection(modes)
-                            .doc(emailController.text)
-                            .set({
-                          'name': nameController.text,
-                          'email': emailController.text
-                        }, SetOptions(merge: true));
-                      }
+
                     });
                   }),
               RadioListTile(
@@ -212,29 +201,23 @@ late  UserCredential response;
                   contentPadding: EdgeInsets.zero,
                   value: 'provider',
                   groupValue: modes,
-                  onChanged: (value) {
-                    setState(() {
+                  onChanged: (value)
+                  {
+                    setState(()
+                    {
                       modes = value;
-                      if (modes == 'provider') {
-                        emails.add(emailController.text);
-                        modess.add('provider');
-                        FirebaseFirestore.instance
-                            .collection(modes)
-                            .doc(emailController.text)
-                            .set({
-                          'name': nameController.text,
-                          'email': emailController.text
-                        }, SetOptions(merge: true));
-                      }
+
                     });
                   }),
               ElevatedButton(
                   onPressed: () async
                   {
+                    if(LocationCubit.get(context).servicesClicked.isNotEmpty)
+                      {
+                        LocationCubit.get(context).servicesClicked.clear();
+                      }
+                    print('salma + $modes');
                     response = await signUp();
-
-                    print(response.user!.uid);
-                    print(response.user!.email);
                     if(modes=='provider')
                       {
                         await  CacheHelper.saveStringData(key: 'uIdProvider', value: emailController.text);
@@ -249,7 +232,7 @@ late  UserCredential response;
                                 )),
                                 (route) => false);
                       }
-                    else
+                    else if(modes=='user')
                       {
                         await  CacheHelper.saveStringData(key: 'uIdUser', value: emailController.text);
                       await  CacheHelper.saveStringData(key: 'modeUser', value: modes);
@@ -265,6 +248,13 @@ late  UserCredential response;
                                 )),
                                 (route) => false);
                       }
+                    FirebaseFirestore.instance
+                        .collection(modes)
+                        .doc(emailController.text)
+                        .set({
+                      'name': nameController.text,
+                      'email': emailController.text
+                    }, SetOptions(merge: true));
 
                     // That's it to display an alert, use other properties to customize.
                   },
