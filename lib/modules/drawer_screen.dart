@@ -28,7 +28,7 @@ class DrawerPart extends StatelessWidget
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
               [
-                mode=='user'?
+                emailUser=='user'?
                 UserAccountsDrawerHeader (
                     decoration: BoxDecoration(color: Colors.teal),
                     accountName: Text(nameUser!),
@@ -36,7 +36,7 @@ class DrawerPart extends StatelessWidget
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: Colors.pink,
                       child: Text(
-                        nameUser[0].toUpperCase(),
+                        nameProvider![0].toUpperCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -56,10 +56,8 @@ class DrawerPart extends StatelessWidget
                             fontSize: 20,
                             color: Colors.white),
                       ),
-                    )),
-
-
-
+                    ))
+               ,
                 buildDrawerItem(
                   cubit.screensByDrawer, cubit.drawerIcons, context,),
                 ExpansionTile(

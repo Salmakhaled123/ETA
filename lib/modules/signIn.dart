@@ -149,9 +149,7 @@ class _LoginScreenState extends State<LoginScreen>
                     String ?uidUser=CacheHelper.getData(key: 'uIdUser');
                     String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
                     String ?uidProvider=CacheHelper.getData(key: 'uIdProvider');
-print(uidProvider);
-print(uidUser);
-                    if( uidUser==emailController.text)
+                    if( modeUser=='user' && uidUser==emailController.text)
                       {
                         Navigator.pushAndRemoveUntil(
                             context,
@@ -159,16 +157,12 @@ print(uidUser);
                               uId:uidUser,email: emailController.text,)),
                                 (route) => false);
                       }
-                   else if( uidProvider==emailController.text)
-                     {
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
-                             uId:uidProvider,)),
-                               (route) => false);
-                     }
-
-
+                    else if(modeProvider=='provider' && uidProvider==emailController.text)
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
+                          uId:uidProvider,)),
+                            (route) => false);
                   },
                   child: Text('Sign in'))
             ]),

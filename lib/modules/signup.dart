@@ -206,6 +206,7 @@ late  UserCredential response;
                     setState(()
                     {
                       modes = value;
+                      print(modes);
 
                     });
                   }),
