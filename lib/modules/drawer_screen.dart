@@ -19,6 +19,7 @@ class DrawerPart extends StatelessWidget
     String  ?nameUser=CacheHelper.getData(key: 'nameUser');
     String ?emailProvider=CacheHelper.getData(key: 'uIdProvider');
     String  ?nameProvider=CacheHelper.getData(key: 'nameProvider');
+    String ? modeUser=CacheHelper.getData(key: 'modeUser');
 
     var cubit = LocationCubit.get(context);
     return BlocConsumer<LocationCubit,LocationStates>(listener:(context,state){} ,
@@ -28,7 +29,7 @@ class DrawerPart extends StatelessWidget
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
               [
-                emailUser=='user'?
+                modeUser=='user'?
                 UserAccountsDrawerHeader (
                     decoration: BoxDecoration(color: Colors.teal),
                     accountName: Text(nameUser!),
@@ -36,7 +37,7 @@ class DrawerPart extends StatelessWidget
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: Colors.pink,
                       child: Text(
-                        nameProvider![0].toUpperCase(),
+                        nameUser[0].toUpperCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
