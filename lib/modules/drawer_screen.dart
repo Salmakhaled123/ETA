@@ -29,7 +29,7 @@ class DrawerPart extends StatelessWidget
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
               [
-                modeUser=='user'?
+                uId==emailUser?
                 UserAccountsDrawerHeader (
                     decoration: BoxDecoration(color: Colors.teal),
                     accountName: Text(nameUser!),
