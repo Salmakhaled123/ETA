@@ -68,7 +68,7 @@ class MapScreen extends StatelessWidget
                 ),
               ),
 
-              if (cubit.info != null)
+              if (cubit.info != null )
                 Positioned(
                   top: 20.0,
                   child: Container(
@@ -142,15 +142,18 @@ class MapScreen extends StatelessWidget
                                       fontFamily: 'Serif')),
                             ],
                           ),
-                          onPressed: () {
+                          onPressed: ()
+                          {
+
                             showModalBottomSheet<void>(
                               shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(30.0),
                                       topRight: Radius.circular(30.0))),
                               context: context,
-                              builder: (BuildContext context) =>
-                                  SingleChildScrollView(
+                              builder: (BuildContext context)
+                              {
+                                return  SingleChildScrollView(
                                 child: Column(
                                   children: [
                                     Container(
@@ -191,7 +194,8 @@ class MapScreen extends StatelessWidget
                                               crossAxisCount: 2,
                                               children: [
                                                 GestureDetector(
-                                                  onTap: () => {
+                                                  onTap: () {
+                                                  {
                                                     showModalBottomSheet<void>(
                                                       shape: const RoundedRectangleBorder(
                                                           borderRadius:
@@ -277,10 +281,9 @@ class MapScreen extends StatelessWidget
                                                                 child:
                                                                     ElevatedButton(
                                                                   onPressed:
-                                                                      () async{
-
-                                                                       await cubit.connection();
-
+                                                                      ()
+                                                                      {
+                                                                     cubit.connection(context);
 
                                                                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>RequestScreen(uId: uId,service: 'Tow truck',)));
                                                                   },
@@ -306,8 +309,8 @@ class MapScreen extends StatelessWidget
                                                           ),
                                                         ),
                                                       ),
-                                                    )
-                                                  },
+                                                   );
+                                                  }},
                                                   child: Card(
                                                     shape:
                                                         RoundedRectangleBorder(
@@ -342,6 +345,7 @@ class MapScreen extends StatelessWidget
                                                 GestureDetector(
                                                   onTap: () => {
                                                     showModalBottomSheet<void>(
+
                                                       shape: const RoundedRectangleBorder(
                                                           borderRadius:
                                                               BorderRadius.only(
@@ -351,6 +355,7 @@ class MapScreen extends StatelessWidget
                                                                   topRight: Radius
                                                                       .circular(
                                                                           30.0))),
+
                                                       context: context,
                                                       builder: (BuildContext
                                                               context) =>
@@ -426,7 +431,9 @@ class MapScreen extends StatelessWidget
                                                                 child:
                                                                     ElevatedButton(
                                                                   onPressed:
-                                                                      () {},
+                                                                      () {
+                                                                    Navigator.pop(context);
+                                                                      },
                                                                   style: ElevatedButton.styleFrom(
                                                                       shape: RoundedRectangleBorder(
                                                                           borderRadius: BorderRadius.circular(
@@ -1455,7 +1462,7 @@ class MapScreen extends StatelessWidget
                                     ),
                                   ],
                                 ),
-                              ),
+                                );},
                             );
                           },
                         ),

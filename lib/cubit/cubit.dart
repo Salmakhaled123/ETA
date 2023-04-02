@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickalert/quickalert.dart';
 import '../models/directions_model.dart';
 import '../models/directions_repository.dart';
 
@@ -34,14 +35,22 @@ class LocationCubit extends Cubit<LocationStates> {
   var latProvider;
   var langProvider;
 LatLng ?lngUser,lngProvider;
-  getLatAndLong({uId, mode}) {
-    if (mode == 'user') {
+  getLatAndLong({required uId,required mode})
+  {
+    if (mode == 'user')
+    {
+      getUserLocation(uId, mode);
+    } else {
+      getProviderLocation(uId, mode);
+    }
+  }
+  getUserLocation(uId,mode)
+  {
+    {
       currentLocationUser = Geolocator.getCurrentPosition().then((value) {
         latUser = value.latitude;
         langUser = value.longitude;
-        print('lat user $latUser');
-        print('lang user $langUser');
-         lngUser = LatLng(latUser, langUser);
+        lngUser = LatLng(latUser, langUser);
         FirebaseFirestore.instance.collection(mode).doc(uId).set({
           'current location': GeoPoint(value.latitude, value.longitude),
           'mode': mode,
@@ -60,7 +69,11 @@ LatLng ?lngUser,lngProvider;
         print(error.toString());
         emit(GetCurrentLocationError(error.toString()));
       });
-    } else {
+    };
+  }
+  getProviderLocation(uId,mode)
+  {
+    {
       currentLocationProvider = Geolocator.getCurrentPosition().then((value) {
         latProvider = value.latitude;
         langProvider = value.longitude;
@@ -85,7 +98,7 @@ LatLng ?lngUser,lngProvider;
         print(error.toString());
         emit(GetCurrentLocationError(error.toString()));
       });
-    }
+    };
   }
 
   List<String> screensByDrawer = [
@@ -285,13 +298,10 @@ LatLng ?lngUser,lngProvider;
     }
   }
 
-  //variables for directions
-  //Set<Polyline>polylines = <Polyline>{};
-  late String time;
-  late String distance;
 
 
-  List<ServiceItem> services = [
+  List<ServiceItem> services =
+  [
     ServiceItem(
         name: 'Tow Truck', image: 'assets/new-tow.png', isClicked: false),
     ServiceItem(name: 'winch', image: 'assets/new-win.png', isClicked: false),
@@ -349,8 +359,7 @@ LatLng ?lngUser,lngProvider;
     return model.isClicked;
   }
   Directions? info;
-
-  connection()async
+  connection(context)async
   {
     await FirebaseFirestore.instance.collection('provider').get().then((value)
     {
@@ -362,12 +371,22 @@ LatLng ?lngUser,lngProvider;
             position: LatLng(doc.data()['current location'].latitude,doc.data()['current location'].longitude),
             infoWindow: InfoWindow(title: 'provider'));
         markers.add(marker);
-        // mapController1?.animateCamera(CameraUpdate.newLatLng(lngProvider!));
         break;
       } });
+    if(lngUser==null)
+      {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          text: 'determine your location please',
+        );
+      }
     final directions =await DirectionsRepository()
         .getDirections(origin: lngUser!, destination: lngProvider!);
     info = directions;
+    Navigator.pop(context);
+    Navigator.pop(context);
+
     emit(DirectionsSuccess());
   }
   void removeService(model, uId, serviceName) {

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../cache/shared_pref.dart';
+import '../cubit/cubit.dart';
 import 'mapScreen.dart';
 class LoginScreen extends StatefulWidget {
   @override
@@ -144,7 +145,9 @@ class _LoginScreenState extends State<LoginScreen>
                   onPressed: () async
                   {
                     await SignIn();
-
+                    var cubit= LocationCubit.get(context);
+                    cubit.lngUser=null;
+                    cubit.info=null;
                     String ? modeUser=CacheHelper.getData(key: 'modeUser');
                     String ?uidUser=CacheHelper.getData(key: 'uIdUser');
                     String ? modeProvider=CacheHelper.getData(key: 'modeProvider');

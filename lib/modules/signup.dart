@@ -213,6 +213,9 @@ late  UserCredential response;
               ElevatedButton(
                   onPressed: () async
                   {
+                  var cubit=  LocationCubit.get(context);
+                  cubit.info=null;
+                  cubit.lngUser=null;
                     if(LocationCubit.get(context).servicesClicked.isNotEmpty)
                       {
                         LocationCubit.get(context).servicesClicked.clear();
