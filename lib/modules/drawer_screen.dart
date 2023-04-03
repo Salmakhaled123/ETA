@@ -19,7 +19,7 @@ class DrawerPart extends StatelessWidget
     String  ?nameUser=CacheHelper.getData(key: 'nameUser');
     String ?emailProvider=CacheHelper.getData(key: 'uIdProvider');
     String  ?nameProvider=CacheHelper.getData(key: 'nameProvider');
-    String ? modeUser=CacheHelper.getData(key: 'modeUser');
+
 
     var cubit = LocationCubit.get(context);
     return BlocConsumer<LocationCubit,LocationStates>(listener:(context,state){} ,
@@ -101,8 +101,10 @@ class DrawerPart extends StatelessWidget
                 ),
                 ListTile(title: Text('log out',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),leading: Icon(Icons.logout,size: 30),onTap: ()async
                 {
+                  cubit.servicesClicked=[];
 
-                  await FirebaseAuth.instance.signOut();
+                await FirebaseAuth.instance.signOut();
+
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                 }),
                 Center(

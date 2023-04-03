@@ -67,35 +67,61 @@ class MapScreen extends StatelessWidget
 
                 ),
               ),
-
               if (cubit.info != null )
                 Positioned(
-                  top: 20.0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 6.0,
-                      horizontal: 12.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.yellowAccent,
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(0, 2),
-                          blurRadius: 6.0,
-                        )
+                    bottom: 550,
+                    right: 0,
+                    left: 0,
+                    child: Row(
+                      children: [
+                        Flexible(
+                            flex: 1,
+                            child: Card(
+                              elevation: 6,
+                              color: Colors.lightGreenAccent,
+                              child: ListTile(
+                                  dense: true,
+                                  horizontalTitleGap: 0,
+                                  title: Text(cubit.info!.totalDuration,
+                                    style:
+                                    TextStyle(fontWeight: FontWeight.bold,
+                                      color: Colors.black, fontSize: 14,
+                                    ),
+                                    ),
+                                  leading: Icon(
+                                    Icons.access_time_filled,
+                                    size: 30,
+                                  )),
+                              margin: EdgeInsets.fromLTRB(20, 50, 20, 0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            )),
+                        SizedBox(width: 30,),
+                        Flexible(
+                            flex: 1,
+                            child: Card(
+                              elevation: 6,
+                              color: Colors.lightGreenAccent,
+                              child: ListTile(
+                                  dense: true,
+                                  horizontalTitleGap: 0,
+                                  title: Text(cubit.info!.totalDistance,
+                                    style:
+                                    TextStyle(fontWeight: FontWeight.bold,
+                                      color: Colors.black, fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                  leading: Icon(
+                                    Icons.directions_car_filled,
+                                    size: 30,
+                                  )),
+                              margin: EdgeInsets.fromLTRB(20, 50, 20, 0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            )),
+
                       ],
-                    ),
-                    child: Text(
-                      '${cubit.info?.totalDistance}, ${cubit.info?.totalDuration}',
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
+                    )),
               Positioned(
                 height: mediaHeight * 0.5,
                 right: 0.0,

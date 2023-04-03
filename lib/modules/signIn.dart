@@ -3,7 +3,6 @@ import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../cache/shared_pref.dart';
 import '../cubit/cubit.dart';
 import 'mapScreen.dart';
@@ -151,9 +150,11 @@ class _LoginScreenState extends State<LoginScreen>
                     String ? modeUser=CacheHelper.getData(key: 'modeUser');
                     String ?uidUser=CacheHelper.getData(key: 'uIdUser');
                     String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
-                    String ?uidProvider=CacheHelper.getData(key: 'uIdProvider');
+                    String ? uidProvider=CacheHelper.getData(key: 'uIdProvider');
+
                     if( modeUser=='user' && uidUser==emailController.text)
                       {
+
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => MapScreen(mode: modeUser,
@@ -166,7 +167,9 @@ class _LoginScreenState extends State<LoginScreen>
                         MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
                           uId:uidProvider,)),
                             (route) => false);
+
                   },
+
                   child: Text('Sign in'))
             ]),
           ),

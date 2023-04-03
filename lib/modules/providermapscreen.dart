@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../components/components.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'drawer_screen.dart';
@@ -20,9 +19,9 @@ class ProviderMapScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = LocationCubit.get(context);
+
         print('uId $uId');
         print('mode $mode');
-        var searchController = TextEditingController();
         double mediaHeight = MediaQuery.of(context).size.height;
         double mediaWidth = MediaQuery.of(context).size.height;
         return Scaffold(
@@ -54,21 +53,7 @@ class ProviderMapScreen extends StatelessWidget {
                   markers: cubit.markers,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: defaultFormField(
-                  label: 'Search Places',
-                  prefix: Icons.search,
-                  type: TextInputType.text,
-                  isPassword: false,
-                  controller: searchController,
-                  validate: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'search musn\' t be empty';
-                    }
-                  },
-                ),
-              ),
+
               // SizedBox(
               //   height: mediaHeight * 0.5,
               // ),
@@ -165,7 +150,10 @@ class ProviderMapScreen extends StatelessWidget {
                                                     crossAxisSpacing: 5,
                                                     crossAxisCount: 2,
                                                   ),
-                                                  itemBuilder: (context, index) {
+                                                  itemBuilder: (context, index)
+                                                  {
+
+
                                                     return GestureDetector(
                                                       onTap: () {
                                                         if (index == 2) {
@@ -203,12 +191,15 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                   context);
                                                                             },
                                                                           )),
+
                                                                       ListView
                                                                           .builder(shrinkWrap: true,
                                                                         physics:const  BouncingScrollPhysics(),
                                                                         itemBuilder:
                                                                             (context,
-                                                                            index) {
+                                                                            index)
+                                                                        {
+
                                                                           return GestureDetector(
                                                                               onTap:
                                                                                   ()
@@ -257,12 +248,14 @@ class ProviderMapScreen extends StatelessWidget {
                                                                   ),
                                                                 ),
                                                           );
-                                                        } else {
-                                                          cubit.isServiceClicked(
-                                                              cubit.services[index],
-                                                              uId,
-                                                              cubit.services[index]
-                                                                  .name);
+                                                        }
+
+                                                          else
+                                                            {
+                                                              cubit.isServiceClicked(
+                                                                  cubit.services[index],
+                                                                  uId,
+                                                                  cubit.services[index].name);
                                                         }
                                                       },
                                                       child: Card(
@@ -272,10 +265,11 @@ class ProviderMapScreen extends StatelessWidget {
                                                             BorderRadius
                                                                 .circular(
                                                                 20.0)),
+
                                                         color: cubit.services[index]
                                                             .isClicked
-                                                            ? Colors.teal
-                                                            : Colors.white70,
+                                                            ?Colors.teal:Colors.white70
+                                                            ,
                                                         child: Column(
                                                           children: [
                                                             Container(

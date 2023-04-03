@@ -216,10 +216,7 @@ late  UserCredential response;
                   var cubit=  LocationCubit.get(context);
                   cubit.info=null;
                   cubit.lngUser=null;
-                    if(LocationCubit.get(context).servicesClicked.isNotEmpty)
-                      {
-                        LocationCubit.get(context).servicesClicked.clear();
-                      }
+                  cubit.servicesClicked=[];
                     print('salma + $modes');
                     response = await signUp();
                     if(modes=='provider')

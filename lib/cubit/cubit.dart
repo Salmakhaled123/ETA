@@ -336,31 +336,43 @@ LatLng ?lngUser,lngProvider;
 
   List<ServiceItem> servicesClicked = [];
 
-  bool isServiceClicked(ServiceItem model, uId, serviceName) {
+bool isServiceClicked(ServiceItem model, uId, serviceName)
+{
     model.isClicked = !model.isClicked;
 
-    if (model.isClicked == true)
+    if (model.isClicked == true )
     {
       servicesClicked.add(model);
+
       FirebaseFirestore.instance.collection('provider').doc(uId).set({
         'services': FieldValue.arrayUnion([serviceName])
       }, SetOptions(merge: true));
-    } else if (model.isClicked == false && servicesClicked.contains(model))
+    } else if (model.isClicked == false && servicesClicked.contains(model)
+        )
     {
       servicesClicked.remove(model);
       FirebaseFirestore.instance.collection('provider').doc(uId).set({
         'services': FieldValue.arrayRemove([serviceName])
       }, SetOptions(merge: true));
-      print(model.isClicked);
       print(servicesClicked.length);
 
     }
     emit(ServiceClickedSuccessfully());
-    return model.isClicked;
+return model.isClicked;
   }
+
   Directions? info;
   connection(context)async
   {
+    if(lngUser==null)
+    {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'determine your location please',
+
+      );
+    }
     await FirebaseFirestore.instance.collection('provider').get().then((value)
     {
       for (var doc in value.docs)
@@ -373,14 +385,7 @@ LatLng ?lngUser,lngProvider;
         markers.add(marker);
         break;
       } });
-    if(lngUser==null)
-      {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          text: 'determine your location please',
-        );
-      }
+
     final directions =await DirectionsRepository()
         .getDirections(origin: lngUser!, destination: lngProvider!);
     info = directions;
@@ -405,6 +410,10 @@ class ServiceItem {
   String image;
   String name;
   bool isClicked;
+
+
   ServiceItem(
-      {required this.name, required this.image, required this.isClicked});
+      {required this.name, required this.image, required this.isClicked,
+
+      });
 }
