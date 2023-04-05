@@ -31,19 +31,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^2.2.1
   bloc: ^8.1.0
   flutter_bloc: ^8.1.1
-  geolocator: ^9.0.2
   awesome_dialog: ^3.0.2
   shared_preferences: ^2.0.20
   quickalert: ^1.0.1
   dio: ^5.0.2
-  flutter_polyline_points: ^1.0.0
+  fluttertoast: ^8.2.1
   #firebase
   cloud_firestore: ^4.2.0
   firebase_core: ^2.3.0
   firebase_auth: ^4.2.5
+  #maps
+  google_maps_flutter: ^2.2.1
+  geolocator: ^9.0.2
+  flutter_polyline_points: ^1.0.0
+
 
 
   # The following adds the Cupertino Icons font to your application.

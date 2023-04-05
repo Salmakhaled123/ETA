@@ -78,7 +78,7 @@ class MapScreen extends StatelessWidget
                             flex: 1,
                             child: Card(
                               elevation: 6,
-                              color: Color(0xff84d389),
+                              color: Color(0xff99EDC3),
                               child: ListTile(
                                   dense: true,
                                   horizontalTitleGap: 0,
@@ -101,7 +101,7 @@ class MapScreen extends StatelessWidget
                             flex: 1,
                             child: Card(
                               elevation: 6,
-                              color: Color(0xff84d389),
+                              color: Color(0xff99EDC3),
                               child: ListTile(
                                   dense: true,
                                   horizontalTitleGap: 0,

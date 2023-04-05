@@ -5,6 +5,7 @@ import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signIn.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../cache/shared_pref.dart';
 import 'mapScreen.dart';
@@ -19,8 +20,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passController = TextEditingController();
@@ -33,10 +32,8 @@ late  UserCredential response;
   var lat;
   var lang;
   Set<Marker> markers = {};
-
+  var formKey = GlobalKey<FormState>();
   signUp() async {
-    if (formKey.currentState!.validate()) {
-      print('valid');
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -62,17 +59,14 @@ late  UserCredential response;
       } catch (e) {
         print(e);
       }
-    } else {
-      print('not valid');
     }
-  }
+
 
   @override
   void initState() {
     super.initState();
   }
 
-  var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,10 +210,10 @@ late  UserCredential response;
                   var cubit=  LocationCubit.get(context);
                   cubit.info=null;
                   cubit.lngUser=null;
-                  cubit.servicesClicked=[];
+
                     print('salma + $modes');
-                    response = await signUp();
-                    if(modes=='provider')
+
+                    if(modes=='provider'&& formKey.currentState!.validate())
                       {
                         await  CacheHelper.saveStringData(key: 'uIdProvider', value: emailController.text);
                         await  CacheHelper.saveStringData(key: 'modeProvider', value: modes);
@@ -233,7 +227,7 @@ late  UserCredential response;
                                 )),
                                 (route) => false);
                       }
-                    else if(modes=='user')
+                    else if(modes=='user' && formKey.currentState!.validate())
                       {
                         await  CacheHelper.saveStringData(key: 'uIdUser', value: emailController.text);
                       await  CacheHelper.saveStringData(key: 'modeUser', value: modes);
@@ -249,13 +243,29 @@ late  UserCredential response;
                                 )),
                                 (route) => false);
                       }
-                    FirebaseFirestore.instance
-                        .collection(modes)
-                        .doc(emailController.text)
-                        .set({
-                      'name': nameController.text,
-                      'email': emailController.text
-                    }, SetOptions(merge: true));
+                    if(modes==null )
+                      {
+                        Fluttertoast.showToast(
+                            msg: "please select one of the options",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                      }
+                    if( formKey.currentState!.validate() && modes!=null)
+                      {
+                        response = await signUp();
+                        FirebaseFirestore.instance
+                            .collection(modes)
+                            .doc(emailController.text)
+                            .set({
+                          'name': nameController.text,
+                          'email': emailController.text
+                        }, SetOptions(merge: true));
+                      }
 
                     // That's it to display an alert, use other properties to customize.
                   },

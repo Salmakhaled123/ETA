@@ -112,42 +112,7 @@ LatLng ?lngUser,lngProvider;
     Icons.language,
   ];
 
-  Widget buildDrawer() =>
-      Drawer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: Colors.teal),
-                  accountName: Text('admin'),
-                  accountEmail: Text('admin@gmail.com'),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundColor: Colors.pink,
-                    child: Text(
-                      'A',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
-                    ),
-                  )),
-              // buildDrawerItem(
-              //     cubit.screensByDrawer, cubit.drawerIcons, context),
-              // Center(
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => ProviderScreen()));
-              //       },
-              //       style: ButtonStyle(
-              //           backgroundColor:
-              //           MaterialStateProperty.all(Colors.teal)),
-              //       child: Text('Provider mode')),
-              // )
-            ],
-          ));
+
 
   bool isDark = false;
   String style = '';
@@ -320,12 +285,11 @@ LatLng ?lngUser,lngProvider;
     ServiceItem(name: 'Tire Change', image: 'assets/tire.png', isClicked: false)
   ];
   List<ServiceItem> emergencyItems = [
-    ServiceItem(
+ ServiceItem(
         name: 'Fire Stations',
         image: 'assets/fire-truck.png',
         isClicked: false),
     ServiceItem(
-
         name: 'Hospitals', image: 'assets/hospital.png', isClicked: false),
     ServiceItem(
         name: 'Police Stations',
@@ -334,33 +298,24 @@ LatLng ?lngUser,lngProvider;
   ];
 
 
-  List<ServiceItem> servicesClicked = [];
 
-bool isServiceClicked(ServiceItem model, uId, serviceName)
+int ?selectedIndex1;
+int ?selectedIndex2;
+void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emergencyIndex,
+})
 {
-    model.isClicked = !model.isClicked;
-
+    model!.isClicked = !model.isClicked;
     if (model.isClicked == true )
     {
-      servicesClicked.add(model);
-
-      FirebaseFirestore.instance.collection('provider').doc(uId).set({
-        'services': FieldValue.arrayUnion([serviceName])
-      }, SetOptions(merge: true));
-    } else if (model.isClicked == false && servicesClicked.contains(model)
-        )
-    {
-      servicesClicked.remove(model);
-      FirebaseFirestore.instance.collection('provider').doc(uId).set({
-        'services': FieldValue.arrayRemove([serviceName])
-      }, SetOptions(merge: true));
-      print(servicesClicked.length);
-
+          FirebaseFirestore.instance.collection('provider').doc(uId).set({
+            'services': serviceName
+          }, SetOptions(merge: true));
     }
+    selectedIndex1=serviceIndex;
+    selectedIndex2=emergencyIndex;
     emit(ServiceClickedSuccessfully());
-return model.isClicked;
-  }
 
+  }
   Directions? info;
   connection(context)async
   {
@@ -395,7 +350,7 @@ return model.isClicked;
     emit(DirectionsSuccess());
   }
   void removeService(model, uId, serviceName) {
-    servicesClicked.remove(model);
+
     FirebaseFirestore.instance.collection('provider').doc(uId).set(
         {
           'services': FieldValue.arrayRemove([serviceName])

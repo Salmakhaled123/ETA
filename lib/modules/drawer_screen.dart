@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signIn.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -61,34 +62,7 @@ class DrawerPart extends StatelessWidget
                ,
                 buildDrawerItem(
                   cubit.screensByDrawer, cubit.drawerIcons, context,),
-                ExpansionTile(
-                    leading: Icon(Icons.language),
-                    title: Text(
-                      'language',
 
-                    ),
-                    children: [
-                      // RadioListTile(
-                      //   activeColor: Colors.teal,
-                      //   value: 'Arabic',
-                      //   groupValue: cubit.lang,
-                      //   onChanged: (value) {
-                      //     cubit.changeRadioVal(value);
-                      //     cubit.changeLanguageToArabic(context);
-                      //   },
-                      //   title: Text('Arabic').tr(),
-                      // ),
-                      // RadioListTile(
-                      //   activeColor: Colors.teal,
-                      //   value: 'English',
-                      //   groupValue: cubit.lang,
-                      //   onChanged: (value) {
-                      //     cubit.changeRadioVal(value);
-                      //     cubit.changeLanguageToEnglish(context);
-                      //   },
-                      //   title: Text('English').tr(),
-                      // )
-                    ]),
                 SwitchListTile(
                   value: cubit.isDark,
                   onChanged: (val)
@@ -101,10 +75,18 @@ class DrawerPart extends StatelessWidget
                 ),
                 ListTile(title: Text('log out',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),leading: Icon(Icons.logout,size: 30),onTap: ()async
                 {
-                  cubit.servicesClicked=[];
+
+                   if(mode=='provider')
+                     {
+                       cubit.selectedIndex1=-1;
+                       cubit.selectedIndex2=-1;
+                       FirebaseFirestore.instance.collection('provider').doc(uId).set(
+                           {
+                             'services':''
+                           },SetOptions(merge: true));
+                     }
 
                 await FirebaseAuth.instance.signOut();
-
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                 }),
                 Center(

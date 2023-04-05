@@ -20,6 +20,7 @@ class ServiceClickedSuccessfully extends LocationStates{}
 class RemovedSuccessfully extends LocationStates{}
 class EnglishState extends LocationStates{}
 class DirectionsSuccess extends LocationStates{}
+class RemoveItems extends LocationStates{}
 
 
 

@@ -22,6 +22,7 @@ class ProviderMapScreen extends StatelessWidget {
 
         print('uId $uId');
         print('mode $mode');
+
         double mediaHeight = MediaQuery.of(context).size.height;
         double mediaWidth = MediaQuery.of(context).size.height;
         return Scaffold(
@@ -191,13 +192,12 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                   context);
                                                                             },
                                                                           )),
-
                                                                       ListView
                                                                           .builder(shrinkWrap: true,
                                                                         physics:const  BouncingScrollPhysics(),
                                                                         itemBuilder:
                                                                             (context,
-                                                                            index)
+                                                                            emergencyIndex)
                                                                         {
 
                                                                           return GestureDetector(
@@ -205,9 +205,10 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                   ()
                                                                               {
                                                                                 cubit.isServiceClicked(
-                                                                                    cubit.emergencyItems[index],
-                                                                                    uId,
-                                                                                    cubit.emergencyItems[index].name);
+                                                                                  uId: uId,
+                                                                                model: cubit.emergencyItems[emergencyIndex],
+                                                                                serviceName: cubit.emergencyItems[emergencyIndex].name,
+                                                                                emergencyIndex: emergencyIndex);
                                                                               },
                                                                               child: Padding(
                                                                                 padding: const EdgeInsets.all(10.0),
@@ -216,7 +217,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                   alignment: Alignment.center,
                                                                                   child: Card(
                                                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                                                                    color: cubit.emergencyItems[index].isClicked ? Colors.teal : Colors.white70,
+                                                                                    color: cubit.selectedIndex2==emergencyIndex ? Colors.teal : Colors.white70,
                                                                                     child: Container(width: 160,height: 180,
                                                                                       child: Padding(
                                                                                         padding:
@@ -225,10 +226,10 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                         Column(
                                                                                           children: [
                                                                                             Image(width: 100,height: 120,
-                                                                                              image: AssetImage(cubit.emergencyItems[index].image),
+                                                                                              image: AssetImage(cubit.emergencyItems[emergencyIndex].image),
                                                                                             ),
                                                                                             Text(
-                                                                                              cubit.emergencyItems[index].name,
+                                                                                              cubit.emergencyItems[emergencyIndex].name,
                                                                                               style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'Serif'),
                                                                                             )
                                                                                           ],
@@ -252,10 +253,11 @@ class ProviderMapScreen extends StatelessWidget {
 
                                                           else
                                                             {
-                                                              cubit.isServiceClicked(
-                                                                  cubit.services[index],
-                                                                  uId,
-                                                                  cubit.services[index].name);
+                                                                 cubit.isServiceClicked(model: cubit.services[index],
+                                                                 serviceName: cubit.services[index].name,
+                                                                 uId: uId,serviceIndex: index,);
+
+
                                                         }
                                                       },
                                                       child: Card(
@@ -266,8 +268,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                                 .circular(
                                                                 20.0)),
 
-                                                        color: cubit.services[index]
-                                                            .isClicked
+                                                        color:  cubit.selectedIndex1==index
                                                             ?Colors.teal:Colors.white70
                                                             ,
                                                         child: Column(
