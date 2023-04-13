@@ -110,7 +110,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
                     PhoneScreen.verify= verificationId;
                     PhoneScreen.phone =phoneController.text;
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context)=>const MyVerify(),
+                        MaterialPageRoute(builder: (context)=>MyVerify(),
                         ),
                     );
                   },

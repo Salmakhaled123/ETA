@@ -30,10 +30,13 @@ class _LoginChooseState extends State<LoginChoose> {
             const Text('Go With',
               style: TextStyle(
                   fontSize: 25,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Serif',color: Colors.indigo),),
+                fontWeight: FontWeight.bold,
+                color: Colors.indigo
 
-            const SizedBox(height: 15,),
+              ),
+            ),
+            SizedBox(height: 10,),
+
             GestureDetector(
               onTap: (){
                 Navigator.of(context).push(
