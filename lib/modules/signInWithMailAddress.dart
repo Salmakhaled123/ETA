@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: TextFormField(
               controller: passController,
               focusNode: focusPassword,
-              obscureText: true,
+              obscureText: !_passwordVisible,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),

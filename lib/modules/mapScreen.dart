@@ -25,7 +25,7 @@ class MapScreen extends StatelessWidget
         double mediaWidth = MediaQuery.of(context).size.height;
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.teal,
+            backgroundColor: Colors.indigo,
             title:  Text(
               'My Current Location',
               style: TextStyle(color: Colors.white),
@@ -135,7 +135,7 @@ class MapScreen extends StatelessWidget
                       );
                     },
                     child: CircleAvatar(
-                      backgroundColor: Colors.teal,
+                      backgroundColor: Colors.indigo,
                       radius: 20,
                       child:
                           Icon(Icons.location_searching, color: Colors.white),
@@ -154,7 +154,7 @@ class MapScreen extends StatelessWidget
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50.0)),
-                              backgroundColor: Colors.teal),
+                              backgroundColor: Colors.indigo),
                           child: Row(
                             children:  [
                               Icon(Icons.arrow_upward_outlined),
@@ -319,7 +319,7 @@ class MapScreen extends StatelessWidget
                                                                               50.0)),
                                                                       backgroundColor:
                                                                           Colors
-                                                                              .teal),
+                                                                              .indigo),
                                                                   child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
@@ -465,8 +465,7 @@ class MapScreen extends StatelessWidget
                                                                           borderRadius: BorderRadius.circular(
                                                                               50.0)),
                                                                       backgroundColor:
-                                                                          Colors
-                                                                              .teal),
+                                                                          Colors.indigo),
                                                                   child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
@@ -860,8 +859,7 @@ class MapScreen extends StatelessWidget
                                                                           borderRadius: BorderRadius.circular(
                                                                               50.0)),
                                                                       backgroundColor:
-                                                                          Colors
-                                                                              .teal),
+                                                                          Colors.indigo),
                                                                   child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(
@@ -1003,8 +1001,7 @@ class MapScreen extends StatelessWidget
                                                                           borderRadius: BorderRadius.circular(
                                                                               50.0)),
                                                                       backgroundColor:
-                                                                          Colors
-                                                                              .teal),
+                                                                          Colors.indigo),
                                                                   child: Text(
                                                                       'Request',
                                                                       style: TextStyle(
@@ -1147,7 +1144,7 @@ class MapScreen extends StatelessWidget
                                                                               50.0)),
                                                                       backgroundColor:
                                                                           Colors
-                                                                              .teal),
+                                                                              .indigo),
                                                                   child:  Text(
                                                                       'Request',
                                                                       style: TextStyle(

@@ -32,7 +32,7 @@ class DrawerPart extends StatelessWidget
               [
                 uId==emailUser?
                 UserAccountsDrawerHeader (
-                    decoration: BoxDecoration(color: Colors.teal),
+                    decoration: BoxDecoration(color: Colors.indigo),
                     accountName: Text(nameUser!),
                     accountEmail: Text(emailUser!),
                     currentAccountPicture: CircleAvatar(
@@ -46,7 +46,7 @@ class DrawerPart extends StatelessWidget
                       ),
                     )):
                 UserAccountsDrawerHeader (
-                    decoration: BoxDecoration(color: Colors.teal),
+                    decoration: BoxDecoration(color: Colors.indigo),
                     accountName: Text(nameProvider!),
                     accountEmail: Text(emailProvider!),
                     currentAccountPicture: CircleAvatar(
@@ -70,7 +70,7 @@ class DrawerPart extends StatelessWidget
                     cubit.changeMood(context);
                   },
                   title: Text('Theme',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                  activeColor: Colors.teal,
+                  activeColor: Colors.indigo,
                   secondary: Icon(Icons.nightlight),
                 ),
                 ListTile(title: Text('log out',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),leading: Icon(Icons.logout,size: 30),onTap: ()async
@@ -101,7 +101,7 @@ class DrawerPart extends StatelessWidget
                       },
                       style: ButtonStyle(
                           backgroundColor:
-                          MaterialStateProperty.all(Colors.teal)),
+                          MaterialStateProperty.all(Colors.indigo)),
                       child: Text('Provider mode')),
                 ),
 

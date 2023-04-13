@@ -27,7 +27,7 @@ class ProviderMapScreen extends StatelessWidget {
         double mediaWidth = MediaQuery.of(context).size.height;
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.teal,
+            backgroundColor: Colors.indigo,
             title: const Text(
               'Services',
               style: TextStyle(color: Colors.white),
@@ -71,7 +71,7 @@ class ProviderMapScreen extends StatelessWidget {
                       );
                     },
                     child: CircleAvatar(
-                      backgroundColor: Colors.teal,
+                      backgroundColor: Colors.indigo,
                       radius: 20,
                       child:
                       Icon(Icons.location_searching, color: Colors.white),
@@ -90,7 +90,7 @@ class ProviderMapScreen extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50.0)),
-                              backgroundColor: Colors.teal),
+                              backgroundColor: Colors.indigo),
                           child: Row(
                             children: const [
                               Icon(Icons.arrow_upward_outlined),
@@ -217,7 +217,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                   alignment: Alignment.center,
                                                                                   child: Card(
                                                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                                                                    color: cubit.selectedIndex2==emergencyIndex ? Colors.teal : Colors.white70,
+                                                                                    color: cubit.selectedIndex2==emergencyIndex ? Colors.indigo : Colors.white70,
                                                                                     child: Container(width: 160,height: 180,
                                                                                       child: Padding(
                                                                                         padding:
@@ -269,7 +269,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                                 20.0)),
 
                                                         color:  cubit.selectedIndex1==index
-                                                            ?Colors.teal:Colors.white70
+                                                            ?Colors.indigo:Colors.white70
                                                             ,
                                                         child: Column(
                                                           children: [
