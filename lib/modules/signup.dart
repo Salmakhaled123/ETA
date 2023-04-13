@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etaproject/cubit/cubit.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
@@ -6,13 +5,13 @@ import 'package:etaproject/modules/signIn.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../cache/shared_pref.dart';
+import '../components/constants.dart';
+import '../utiles/showSnackBar.dart';
 import 'mapScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   String? uId;
-
   HomeScreen({this.uId});
 
   @override
@@ -20,41 +19,114 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  RegExp emailRegExp = RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passController = TextEditingController();
-  bool isObscure = false;
+  final phoneController =TextEditingController();
+  final confPasswordController =TextEditingController();
+  final carTypeController =TextEditingController();
+  final carModelController = TextEditingController();
+  final licController =TextEditingController();
+  final focusName=FocusNode();
+  final focusEmail =FocusNode();
+  final focusPassword=FocusNode();
+  final focusConfPassword=FocusNode();
+  final focusPhone =FocusNode();
+  final focusLic =FocusNode();
+  final focusCarType = FocusNode();
+  final focusCarModel = FocusNode();
+
+  bool _confPasswordVisible = false;
+  bool _passwordVisible = false;
 
 late  UserCredential response;
-  dynamic modes;
-  GoogleMapController? mapController1;
-  var currentLocation;
-  var lat;
-  var lang;
-  Set<Marker> markers = {};
+
   var formKey = GlobalKey<FormState>();
+
   signUp() async {
-      try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passController.text,
+    try{
+      if(passController.text!=confPasswordController.text){showSnackBar(context, 'The password Not Match.');}
+      else if (nameController.text.isEmpty) {showSnackBar(context, 'Name Can/t be empty');}
+      else if (phoneController.text.isEmpty) {showSnackBar(context, 'Phone Can/t be empty');}
+      else if (emailController.text.isEmpty) {showSnackBar(context, 'Email can/t be empty');}
+      else if (!emailRegExp.hasMatch(emailController.text)) {showSnackBar(context,  'Enter a correct email');}
+      else if (confPasswordController.text.isEmpty){showSnackBar(context, 'Password Can/t be empty');}
+      else if (confPasswordController.text.length<8){showSnackBar(context,'Enter a password with length at least 8');}
+      else if (carModelController.text.isEmpty) {showSnackBar(context, 'Car Model Can/t be empty');}
+      else if (carTypeController.text.isEmpty) {showSnackBar(context, 'Car Type Can/t be empty');}
+      else if (licController.text.isEmpty) {showSnackBar(context, 'Licence Can/t be empty');}
+      else if(modes==null )
+      {
+        Fluttertoast.showToast(
+            msg: "please select one of the options",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
         );
-        return userCredential;
-      } on FirebaseAuthException catch (e) {
+      }
+
+      else {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: confPasswordController.text);
+        FirebaseFirestore.instance
+            .collection(modes)
+            .doc(emailController.text)
+            .set({
+          'name': nameController.text,
+          'email': emailController.text,
+          'phone': phoneController.text,
+          'car model':carModelController.text,
+          'car type':carTypeController.text,
+          'license':licController.text,
+        }, SetOptions(merge: true));
+        showSnackBar(context, "signed up successfully");
+        if(modes=='provider')
+        {
+          await  CacheHelper.saveStringData(key: 'uIdProvider', value: emailController.text);
+          await  CacheHelper.saveStringData(key: 'modeProvider', value: modes);
+          await  CacheHelper.saveStringData(key: 'nameProvider', value: nameController.text);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProviderMapScreen(
+                    uId: emailController.text,
+                    mode: modes,
+                  )),
+                  (route) => false);
+        }
+        else if(modes=='user' )
+        {
+          await  CacheHelper.saveStringData(key: 'uIdUser', value: emailController.text);
+          await  CacheHelper.saveStringData(key: 'modeUser', value: modes);
+          await  CacheHelper.saveStringData(key: 'nameUser', value: nameController.text);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MapScreen(
+                    uId: emailController.text,
+                    mode: modes,
+                    name: nameController.text,
+                    email: emailController.text,
+                  )),
+                  (route) => false);
+        }
+      }
+    } on FirebaseAuthException catch(e) {
         if (e.code == 'weak-password') {
-          AwesomeDialog(
-                  context: context,
-                  title: 'Error',
-                  body: const Text('The password provided is too weak.'))
-              .show();
-        } else if (e.code == 'email-already-in-use') {
-          AwesomeDialog(
-                  context: context,
-                  title: 'Error',
-                  body:
-                      const Text('The account already exists for that email.'))
-              .show();
+          showSnackBar(context, 'The password provided is too weak.');
+        }
+        else if (e.code == 'email-already-in-use') {
+          showSnackBar(context, 'The account already exists for that email.');
+        }
+        else if (e.code == 'notMatch') {
+          showSnackBar(context, 'The password Not Match.');
+        }
+        else {
+          showSnackBar(context, e.message!);
         }
       } catch (e) {
         print(e);
@@ -70,89 +142,226 @@ late  UserCredential response;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Register',
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Serif',color: Colors.white)),
+        backgroundColor: Colors.indigo,
+      ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Center(
-                child: Image.network(
-                    height: 250,
-                    'https://img.freepik.com/free-vector/scheduling-planning-setting-goals-schedule-timing-workflow-optimization-taking-note-assignment-businesswoman-with-timetable-cartoon-character_335657-2580.jpg?w=740&t=st=1675393490~exp=1675394090~hmac=73c74c6e71eb7e9c146091ff4405f54d833c5fc2981c77374c73ea0c1d88c1a0'),
+      body: ListView(
+
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Image(image: AssetImage('assets/SignupEmail.png'),height:150,width: 300,),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: TextFormField(
+                controller: nameController,
+                focusNode: focusName,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  hintText: "Name",
+                  hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                  focusedBorder: OutlineInputBorder(borderSide:
+                  const BorderSide(color: Colors.indigo),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: Colors.grey.shade100,
+                  filled: true,
+
+                ),
               ),
-              TextFormField(
-                  style: TextStyle(color: Colors.black),
-                  controller: nameController,
-                  keyboardType: TextInputType.text,
-                  validator: (data) {
-                    if (data!.isEmpty) {
-                      return 'this field is required';
-                    }
-                  },
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      hintText: 'username ',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)))),
-              SizedBox(
-                height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              child: TextFormField(
+                controller: phoneController,
+                focusNode: focusPhone,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  hintText: "Phone Number",
+                  hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                  focusedBorder: OutlineInputBorder(borderSide:
+                  const BorderSide(color: Colors.indigo),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: Colors.grey.shade100,
+                  filled: true,
+
+                ),
               ),
-              TextFormField(
-                  style: TextStyle(color: Colors.black),
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (data) {
-                    if (data!.isEmpty) {
-                      return 'email is required';
-                    }
-                  },
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      hintText: 'email address',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)))),
-              SizedBox(
-                height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              child: TextFormField(
+                controller: emailController,
+                focusNode: focusEmail,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  hintText: "Email",
+                  hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                  focusedBorder: OutlineInputBorder(borderSide:
+                  const BorderSide(color: Colors.indigo),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: Colors.grey.shade100,
+                  filled: true,
+
+                ),
               ),
-              TextFormField(
-                  style: TextStyle(color: Colors.black),
-                  controller: passController,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: isObscure,
-                  validator: (data) {
-                    if (data!.isEmpty) {
-                      return 'this field is required';
-                    }
-                  },
-                  decoration: InputDecoration(
-                      suffixIcon: isObscure
-                          ? InkWell(
-                              child: Icon(Icons.remove_red_eye),
-                              onTap: () {
-                                setState(() {
-                                  isObscure = !isObscure;
-                                });
-                              },
-                            )
-                          : InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isObscure = !isObscure;
-                                });
-                              },
-                              child: Icon(Icons.visibility_off)),
-                      prefixIcon: Icon(
-                        Icons.lock_outline_sharp,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              child: TextFormField(
+                controller: passController,
+                focusNode: focusPassword,
+                obscureText: !_passwordVisible,
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  focusedBorder: OutlineInputBorder(borderSide:
+                  const BorderSide(color: Colors.indigo),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: Colors.grey.shade100,
+                  filled: true,
+
+
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.indigo,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
+
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              child: TextFormField(
+                controller: confPasswordController,
+                focusNode: focusConfPassword,
+                obscureText: !_confPasswordVisible,
+                decoration: InputDecoration(
+                  hintText: "Confirm Password",
+                  hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  focusedBorder: OutlineInputBorder(borderSide:
+                  const BorderSide(color: Colors.indigo),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: Colors.grey.shade100,
+                  filled: true,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _confPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.indigo,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _confPasswordVisible = !_confPasswordVisible;
+                      });
+                    },
+                  ),
+
+
+                ),
+              ),
+            ),
+            Row(children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                  child: TextFormField(
+                    controller: carTypeController,
+                    focusNode: focusCarType,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12)
                       ),
-                      hintText: 'password ',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)))),
-              SizedBox(
-                height: 10,
+                      hintText: "Car Type",
+                      hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(borderSide:
+                      const BorderSide(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(12)),
+                      fillColor: Colors.grey.shade100,
+                      filled: true,
+
+                    ),
+                  ),
+                ),
               ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 10, 15, 5),
+                  child: TextFormField(
+                    controller: carModelController,
+                    focusNode: focusCarModel,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12)
+                      ),
+                      hintText: "Car Model",
+                      hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(borderSide:
+                      const BorderSide(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(12)),
+                      fillColor: Colors.grey.shade100,
+                      filled: true,
+
+                    ),
+                  ),
+                ),
+              ),
+            ],),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              child: TextFormField(
+                controller: licController,
+                focusNode: focusLic,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  hintText: "License",
+                  hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.grey),
+                  focusedBorder: OutlineInputBorder(borderSide:
+                  const BorderSide(color: Colors.indigo),
+                      borderRadius: BorderRadius.circular(12)),
+                  fillColor: Colors.grey.shade100,
+                  filled: true,
+
+                ),
+              ),
+            ),
               Row(
                 children: [
                   Text('if you already have account ',
@@ -211,69 +420,14 @@ late  UserCredential response;
                   cubit.info=null;
                   cubit.lngUser=null;
 
-                    print('salma + $modes');
 
-                    if(modes=='provider'&& formKey.currentState!.validate())
-                      {
-                        await  CacheHelper.saveStringData(key: 'uIdProvider', value: emailController.text);
-                        await  CacheHelper.saveStringData(key: 'modeProvider', value: modes);
-                        await  CacheHelper.saveStringData(key: 'nameProvider', value: nameController.text);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProviderMapScreen(
-                                  uId: emailController.text,
-                                  mode: modes,
-                                )),
-                                (route) => false);
-                      }
-                    else if(modes=='user' && formKey.currentState!.validate())
-                      {
-                        await  CacheHelper.saveStringData(key: 'uIdUser', value: emailController.text);
-                      await  CacheHelper.saveStringData(key: 'modeUser', value: modes);
-                      await  CacheHelper.saveStringData(key: 'nameUser', value: nameController.text);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MapScreen(
-                                  uId: emailController.text,
-                                  mode: modes,
-                                  name: nameController.text,
-                                  email: emailController.text,
-                                )),
-                                (route) => false);
-                      }
-                    if(modes==null )
-                      {
-                        Fluttertoast.showToast(
-                            msg: "please select one of the options",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0
-                        );
-                      }
-                    if( formKey.currentState!.validate() && modes!=null)
-                      {
-                        response = await signUp();
-                        FirebaseFirestore.instance
-                            .collection(modes)
-                            .doc(emailController.text)
-                            .set({
-                          'name': nameController.text,
-                          'email': emailController.text
-                        }, SetOptions(merge: true));
-                      }
+                  response = signUp();
+
 
                     // That's it to display an alert, use other properties to customize.
                   },
                   child: Text('Sign Up'))
-            ]),
-          ),
-        ),
-      ),
-    );
+            ]),);
+
   }
 }

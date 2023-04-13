@@ -1,10 +1,10 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../cache/shared_pref.dart';
 import '../cubit/cubit.dart';
+import '../utiles/showSnackBar.dart';
 import 'mapScreen.dart';
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
 {
   SignIn() async {
-    if (formKey1.currentState!.validate())
+
     {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -21,27 +21,17 @@ class _LoginScreenState extends State<LoginScreen>
                 email: emailController.text, password: passController.text);
         return userCredential
         ;
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          AwesomeDialog(
-                  context: context,
-                  body: Text('No user found for that email'),
-                  title: 'error')
-              .show();
-        } else if (e.code == 'wrong-password') {
-          AwesomeDialog(
-                  context: context,
-                  body: Text('Wrong password provided for that user.'),
-                  title: 'error')
-              .show();
-        }
+      } on FirebaseAuthException catch(e){
+        showSnackBar(context, e.message!);
       }
     }
   }
 
+  final focusEmail = FocusNode();
+  final focusPassword = FocusNode();
   var emailController = TextEditingController();
   var passController = TextEditingController();
-  bool isObscure = false;
+  bool _passwordVisible = false;
 
   var formKey1 = GlobalKey<FormState>();
   @override
@@ -54,72 +44,139 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Form(
-          key: formKey1,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(children: [
-              Center(
-                child: Image.network(
-                    height: 250,
-                    'https://img.freepik.com/free-vector/scheduling-planning-setting-goals-schedule-timing-workflow-optimization-taking-note-assignment-businesswoman-with-timetable-cartoon-character_335657-2580.jpg?w=740&t=st=1675393490~exp=1675394090~hmac=73c74c6e71eb7e9c146091ff4405f54d833c5fc2981c77374c73ea0c1d88c1a0'),
+    return GestureDetector(
+      onTap:(){
+        focusPassword.unfocus();
+        focusEmail.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text('Login With Email',
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Serif',color: Colors.white)),
+          backgroundColor: Colors.indigo,
+        ),
+        body:
+        SingleChildScrollView(
+          child:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+          const SizedBox(height: 40,),
+          const Image(image: AssetImage('assets/emailLogin.png'),width: 270,),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
+            child: TextFormField(
+              controller: emailController,
+              focusNode: focusEmail,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(12)
+                ),
+                hintText: "Email",
+                hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.indigo),
+                focusedBorder: OutlineInputBorder(borderSide:
+                const BorderSide(color: Colors.indigo),
+                    borderRadius: BorderRadius.circular(12)),
+                fillColor: Colors.grey.shade100,
+                filled: true,
+
               ),
-              TextFormField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (data) {
-                    if (data!.isEmpty) {
-                      return 'email is required';
-                    }
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
+            child: TextFormField(
+              controller: passController,
+              focusNode: focusPassword,
+              obscureText: true,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(12)
+                ),
+                hintText: "Password",
+                hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.indigo),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Colors.indigo,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
                   },
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      hintText: 'email address',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)))),
-              SizedBox(
-                height: 15,
+                ),
+                focusedBorder: OutlineInputBorder(borderSide:
+                const BorderSide(color: Colors.indigo),
+                    borderRadius: BorderRadius.circular(12)),
+                fillColor: Colors.grey.shade100,
+                filled: true,
+
               ),
-              TextFormField(
-                  controller: passController,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: isObscure,
-                  validator: (data) {
-                    if (data!.isEmpty) {
-                      return 'this field is required';
-                    }
-                  },
-                  decoration: InputDecoration(
-                      suffixIcon: isObscure
-                          ? InkWell(
-                              child: Icon(Icons.remove_red_eye),
-                              onTap: () {
-                                setState(() {
-                                  isObscure = !isObscure;
-                                });
-                              },
-                            )
-                          : InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isObscure = !isObscure;
-                                });
-                              },
-                              child: Icon(Icons.visibility_off)),
-                      prefixIcon: Icon(
-                        Icons.lock_outline_sharp,
-                      ),
-                      hintText: 'password ',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)))),
-              SizedBox(
-                height: 10.0,
-              ),
+            ),
+          ),
+          const SizedBox(height: 15,),
+
+
+                SizedBox(
+                  height: 10,
+                ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),),
+
+                    onPressed: () async
+                    {
+                      await SignIn();
+                      var cubit= LocationCubit.get(context);
+                      cubit.lngUser=null;
+                      cubit.info=null;
+                      String ? modeUser=CacheHelper.getData(key: 'modeUser');
+                      String ?uidUser=CacheHelper.getData(key: 'uIdUser');
+                      String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
+                      String ? uidProvider=CacheHelper.getData(key: 'uIdProvider');
+
+                      if( modeUser=='user' && uidUser==emailController.text )
+                        {
+
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => MapScreen(mode: modeUser,
+                                uId:uidUser,email: emailController.text,)),
+                                  (route) => false);
+                        }
+                      else if(modeProvider=='provider' && uidProvider==emailController.text)
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
+                            uId:uidProvider,)),
+                              (route) => false);
+
+                    },
+
+                child:const Padding(
+                  padding: EdgeInsets.only(left: 15,right: 15,top: 10,bottom: 10),
+                  child: Text('Login',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Serif',color: Colors.white)),
+
+                ),),
               Row(
                 children: [
+                  const SizedBox(width: 30,),
                   Text("if you don't have an  account ",
                       style: TextStyle(fontSize: 16)),
                   TextButton(
@@ -137,44 +194,10 @@ class _LoginScreenState extends State<LoginScreen>
                   )
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                  onPressed: () async
-                  {
-                    await SignIn();
-                    var cubit= LocationCubit.get(context);
-                    cubit.lngUser=null;
-                    cubit.info=null;
-                    String ? modeUser=CacheHelper.getData(key: 'modeUser');
-                    String ?uidUser=CacheHelper.getData(key: 'uIdUser');
-                    String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
-                    String ? uidProvider=CacheHelper.getData(key: 'uIdProvider');
-
-                    if( modeUser=='user' && uidUser==emailController.text && formKey1.currentState!.validate())
-                      {
-
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => MapScreen(mode: modeUser,
-                              uId:uidUser,email: emailController.text,)),
-                                (route) => false);
-                      }
-                    else if(modeProvider=='provider' && uidProvider==emailController.text&& formKey1.currentState!.validate())
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
-                          uId:uidProvider,)),
-                            (route) => false);
-
-                  },
-
-                  child: Text('Sign in'))
-            ]),
+              ]),
+            ),
           ),
-        ),
-      ),
     );
+
   }
 }
