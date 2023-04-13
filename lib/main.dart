@@ -1,3 +1,4 @@
+import 'package:etaproject/modules/login_choose.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,7 @@ import 'cache/shared_pref.dart';
 import 'cubit/bloc_observer.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
-import 'modules/signIn.dart';
+import 'modules/signInWithMailAddress.dart';
 void main()async
 {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget
                 colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal,brightness:Brightness.dark)),
             themeMode: LocationCubit.get(context).isDark? ThemeMode.dark:ThemeMode.light,
             debugShowCheckedModeBanner: false,
-            home: LoginScreen(),
+            home: const LoginChoose(),
           );
         },
         listener: (context, state) {},

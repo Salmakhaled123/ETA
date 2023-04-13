@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
-import 'package:etaproject/modules/signIn.dart';
+import 'package:etaproject/modules/signInWithMailAddress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
