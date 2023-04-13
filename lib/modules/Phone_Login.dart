@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:etaproject/modules/verifyPhoneNumber.dart';
+=======
+import 'package:etaproject/modules/verify.dart';
+>>>>>>> origin/master
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utiles/showSnackBar.dart';

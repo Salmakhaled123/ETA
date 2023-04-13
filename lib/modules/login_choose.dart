@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:etaproject/modules/signInWithMailAddress.dart';
+=======
+import 'package:etaproject/modules/signIn.dart';
+>>>>>>> origin/master
 import 'package:flutter/material.dart';
 import 'Phone_Login.dart';
 
@@ -25,11 +29,19 @@ class _LoginChooseState extends State<LoginChoose> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+<<<<<<< HEAD
             const Image(image: AssetImage('assets/CarServices.png'),width: 270,),
             const SizedBox(height: 20,),
             const Text('Go With',
               style: TextStyle(
                   fontSize: 25,
+=======
+            const Image(image: AssetImage('assets/Road.jpg'),width: 270,),
+            const SizedBox(height: 20,),
+            const Text('Go With',
+              style: TextStyle(
+                  fontSize: 20,
+>>>>>>> origin/master
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Serif',color: Colors.indigo),),
 
