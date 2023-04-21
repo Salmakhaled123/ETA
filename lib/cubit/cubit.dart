@@ -340,6 +340,11 @@ void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emerge
         markers.add(marker);
         break;
       } });
+    if(lngProvider==null)
+      {
+        QuickAlert.show(context: context, type: QuickAlertType.error,
+        title: 'No provider available now');
+      }
 
     final directions =await DirectionsRepository()
         .getDirections(origin: lngUser!, destination: lngProvider!);

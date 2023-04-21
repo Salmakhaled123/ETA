@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signInWithMailAddress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,10 +79,7 @@ class DrawerPart extends StatelessWidget
                      {
                        cubit.selectedIndex1=-1;
                        cubit.selectedIndex2=-1;
-                       FirebaseFirestore.instance.collection('provider').doc(uId).set(
-                           {
-                             'services':''
-                           },SetOptions(merge: true));
+
                      }
 
                 await FirebaseAuth.instance.signOut();
