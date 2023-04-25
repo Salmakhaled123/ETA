@@ -9,6 +9,8 @@ import 'drawer_screen.dart';
 class MapScreen extends StatelessWidget {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String? uId, name, mode, email;
+
+
   MapScreen({required this.mode, required this.uId, this.name, this.email});
   @override
   Widget build(BuildContext context) {
@@ -36,17 +38,7 @@ class MapScreen extends StatelessWidget {
                 height: mediaHeight,
                 width: mediaWidth,
                 child: GoogleMap(
-                  polylines: {
-                    if (cubit.info != null)
-                      Polyline(
-                        polylineId: PolylineId('overview_polyline'),
-                        color: Colors.black,
-                        width: 3,
-                        points: cubit.info!.polylinePoints
-                            .map((e) => LatLng(e.latitude, e.longitude))
-                            .toList(),
-                      ),
-                  },
+                  // polylines: Set<Polyline>.of([polyline]),
                   mapType: MapType.normal,
                   zoomControlsEnabled: false,
                   initialCameraPosition: CameraPosition(

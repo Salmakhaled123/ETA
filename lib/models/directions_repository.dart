@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-
+import '../components/constants.dart';
 import 'directions_model.dart';
 import 'distance_matrix_model.dart';
 
@@ -39,8 +39,6 @@ class DirectionsRepository {
   }
 
   List<LatLng> origins = [];
-  List<LatLng> destinations = [];
-  List<DistanceMatrixElement> sortedElements = [];
   List<DistanceMatrixElement> elements = [];
   Future<List<DistanceMatrixElement>> getDistanceMatrix(context) async {
     List<String> destinationStrings = [];
@@ -94,7 +92,7 @@ class DirectionsRepository {
           print(
               'Duration: ${element.duration.text}, Distance: ${element.distance.text}');
         }
-        Map<LatLng, String> complexElements = {};
+
         for (var i = 0; i < destinations.length; i++)
         {
           // Use the LatLng value as the key and the corresponding
@@ -110,6 +108,7 @@ class DirectionsRepository {
               .compareTo(int.parse(b.duration.text.replaceAll(RegExp(r'[^0-9]'),
                   '')))); // The sorted list of DistanceMatrixElement objects
 // Printing the sorted list to the console
+
         print('====================new ==================');
         for (var i = 0; i < destinations.length; i++) {
           if (sortedElements[0].duration.text ==
@@ -125,10 +124,16 @@ class DirectionsRepository {
                     destinations[i]) {
                   return QuickAlert.show(
                       context: context,
-                      type: QuickAlertType.info,
-                      title: 'provider name ${doc.data()['name']}',
-                      text: 'car model ${doc.data()['car model']} ,'
-                          'eta ${complexElements[destinations[i]]}');
+                      type: QuickAlertType.loading,
+                    title: 'Loading',
+                    text: 'Searching for nearby providers',
+                  );
+                  // return QuickAlert.show(
+                  //     context: context,
+                  //     type: QuickAlertType.info,
+                  //     title: 'provider name ${doc.data()['name']}',
+                  //     text: 'car model ${doc.data()['car model']} ,'
+                  //         'eta ${complexElements[destinations[i]]}');
                 }
               }
             });
