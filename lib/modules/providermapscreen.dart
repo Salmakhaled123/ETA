@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../components/constants.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'drawer_screen.dart';
@@ -209,6 +210,42 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                 model: cubit.emergencyItems[emergencyIndex],
                                                                                 serviceName: cubit.emergencyItems[emergencyIndex].name,
                                                                                 emergencyIndex: emergencyIndex);
+                                                                                for(int i=0;i<=providersUid.length;i++) {
+                                                                                  if (reqButton > 0 && uId == providersUid[i]) {
+                                                                                    showDialog(
+                                                                                        context: context,
+                                                                                        builder: (BuildContext context)
+                                                                                    {
+                                                                                      return AlertDialog(
+                                                                                        title: Text('Accept Request?'),
+                                                                                        content: Column(
+                                                                                          mainAxisSize: MainAxisSize.min,
+                                                                                          children: <Widget>[
+                                                                                            Text('Distance: ${complexElements[destinations[i]]}'),
+                                                                                            SizedBox(height: 10,
+                                                                                              child: Text('ETA: ${complexElements[destinations[i]]}'),
+                                                                                            ),],
+                                                                                        ),
+                                                                                        actions: <Widget>[
+                                                                                          TextButton(
+                                                                                            child: Text('Reject'),
+                                                                                            onPressed: () => Navigator.pop(context, false),
+                                                                                          ),
+                                                                                          TextButton(
+                                                                                            child: Text('Accept'),
+                                                                                            onPressed: () => Navigator.pop(context, true),
+                                                                                          ),
+                                                                                        ],
+                                                                                      );
+                                                                                    }
+                                                                                    );
+                                                                                  }
+                                                                                  else{
+                                                                                    print(uId);
+                                                                                    print(reqButton);
+                                                                                  }
+                                                                                }
+
                                                                               },
                                                                               child: Padding(
                                                                                 padding: const EdgeInsets.all(10.0),

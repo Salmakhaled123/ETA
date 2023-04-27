@@ -38,7 +38,7 @@ class DirectionsRepository {
     return null;
   }
 
-  List<LatLng> origins = [];
+
   List<DistanceMatrixElement> elements = [];
   Future<List<DistanceMatrixElement>> getDistanceMatrix(context) async {
     List<String> destinationStrings = [];
@@ -100,6 +100,15 @@ class DirectionsRepository {
           complexElements[destinations[i]] = elements[i].duration.text;
         }
         print(complexElements);
+
+        for (var i = 0; i < origins.length; i++)
+        {
+          // Use the LatLng value as the key and the corresponding
+          // DistanceMatrixElement as the value in the Map
+          originElements[origins[i]] = elements[i].duration.text;
+        }
+        print(originElements);
+
         sortedElements = List<DistanceMatrixElement>.from(json['rows'][0]
                 ['elements']
             .map((element) => DistanceMatrixElement.fromJson(element)))
@@ -122,18 +131,20 @@ class DirectionsRepository {
                 if (LatLng(doc.data()['current location'].latitude,
                         doc.data()['current location'].longitude) ==
                     destinations[i]) {
-                  return QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.loading,
-                    title: 'Loading',
-                    text: 'Searching for nearby providers',
-                  );
+                  providersUid.add(doc.data()['uid']);
                   // return QuickAlert.show(
                   //     context: context,
-                  //     type: QuickAlertType.info,
-                  //     title: 'provider name ${doc.data()['name']}',
-                  //     text: 'car model ${doc.data()['car model']} ,'
-                  //         'eta ${complexElements[destinations[i]]}');
+                  //     type: QuickAlertType.loading,
+                  //   title: 'Loading',
+                  //   text: 'Searching for nearby providers',
+                  // );
+                  return QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.info,
+                      title: 'provider name ${doc.data()['name']}',
+                      text: 'car model ${doc.data()['car model']} ,'
+                          'eta ${complexElements[destinations[i]]}');
+
                 }
               }
             });

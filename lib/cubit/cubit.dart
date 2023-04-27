@@ -311,10 +311,10 @@ void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emerge
           FirebaseFirestore.instance.collection('provider').doc(uId).set({
             'services': serviceName
           }, SetOptions(merge: true));
-          for (var i = 0; i < destinations.length; i++) {
+          for (var i = 0; i < origins.length; i++) {
             if (sortedElements[0].duration.text ==
-                complexElements[destinations[i]]) {
-              print('${destinations[i]} =>${complexElements[destinations[i]]}');
+                originElements[origins[i]]) {
+              print('${origins[i]} =>${originElements[origins[i]]}');
               FirebaseFirestore.instance
                   .collection('user')
                   .get()
@@ -322,7 +322,8 @@ void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emerge
                 for (var doc in value.docs) {
                   if (LatLng(doc.data()['current location'].latitude,
                       doc.data()['current location'].longitude) ==
-                      destinations[i]) {
+                      origins[i]) {
+                    print('Name ${doc.data()['name']}' 'Phone ${doc.data()['phone']}' 'ETA ${originElements[origins[i]]}',);
                     return Container(
                       decoration: BoxDecoration(
                         color: Colors.indigo,
@@ -337,7 +338,7 @@ void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emerge
                           const SizedBox(height: 5,),
                           Text('Car model ${doc.data()['car model']}',),
                           const SizedBox(height: 5,),
-                          Text('ETA ${complexElements[destinations[i]]}',),
+                          Text('ETA ${originElements[origins[i]]}',),
                           const SizedBox(height: 5,),
                           // Row(
                           //   children: [

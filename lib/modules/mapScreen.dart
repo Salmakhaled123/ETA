@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../components/constants.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import '../models/directions_repository.dart';
@@ -9,7 +10,6 @@ import 'drawer_screen.dart';
 class MapScreen extends StatelessWidget {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String? uId, name, mode, email;
-
 
   MapScreen({required this.mode, required this.uId, this.name, this.email});
   @override
@@ -430,6 +430,7 @@ class MapScreen extends StatelessWidget {
                                                                       await repo
                                                                           .getDistanceMatrix(
                                                                               context);
+                                                                      reqButton++;
                                                                     },
                                                                     style: ElevatedButton.styleFrom(
                                                                         shape: RoundedRectangleBorder(
