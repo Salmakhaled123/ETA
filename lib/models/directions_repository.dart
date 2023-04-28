@@ -17,6 +17,11 @@ class DirectionsRepository {
 
   DirectionsRepository({Dio? dio}) : _dio = dio ?? Dio();
 
+  List<DistanceMatrixElement> sortedElements = [];
+  List<LatLng> origins = [];
+  List<LatLng> destinations = [];
+  Map<LatLng, String> complexElements = {};
+
   Future<Directions?> getDirections({
     required LatLng origin,
     required LatLng destination,

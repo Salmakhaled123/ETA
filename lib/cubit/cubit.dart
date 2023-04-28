@@ -311,62 +311,62 @@ void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emerge
           FirebaseFirestore.instance.collection('provider').doc(uId).set({
             'services': serviceName
           }, SetOptions(merge: true));
-          for (var i = 0; i < origins.length; i++) {
-            if (sortedElements[0].duration.text ==
-                originElements[origins[i]]) {
-              print('${origins[i]} =>${originElements[origins[i]]}');
-              FirebaseFirestore.instance
-                  .collection('user')
-                  .get()
-                  .then((value) {
-                for (var doc in value.docs) {
-                  if (LatLng(doc.data()['current location'].latitude,
-                      doc.data()['current location'].longitude) ==
-                      origins[i]) {
-                    print('Name ${doc.data()['name']}' 'Phone ${doc.data()['phone']}' 'ETA ${originElements[origins[i]]}',);
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        border: Border.all(color: Colors.indigo,width: 4),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        children: [
-                          Text('Name ${doc.data()['name']}',),
-                          const SizedBox(height: 5,),
-                          Text('Phone ${doc.data()['phone']}',),
-                          const SizedBox(height: 5,),
-                          Text('Car model ${doc.data()['car model']}',),
-                          const SizedBox(height: 5,),
-                          Text('ETA ${originElements[origins[i]]}',),
-                          const SizedBox(height: 5,),
-                          // Row(
-                          //   children: [
-                          //     ElevatedButton(onPressed: (){
-                          //
-                          //     }, child: const Text("Accept"))
-                          //   ],
-                          // )
-                        ],
-
-                      ),
-
-
-
-                    );
-
-                    // return QuickAlert.show(
-                    //     context: ,
-                    //     type: QuickAlertType.info,
-                    //     title: 'Name ${doc.data()['name']}',
-                    //     text: 'Car model ${doc.data()['car model']} ,'
-                    //         'eta ${complexElements[destinations[i]]}');
-                  }
-                }
-              });
-              break;
-            }
-          }
+          // for (var i = 0; i < origins.length; i++) {
+          //   if (sortedElements[0].duration.text ==
+          //       originElements[origins[i]]) {
+          //     print('${origins[i]} =>${originElements[origins[i]]}');
+          //     FirebaseFirestore.instance
+          //         .collection('user')
+          //         .get()
+          //         .then((value) {
+          //       for (var doc in value.docs) {
+          //         if (LatLng(doc.data()['current location'].latitude,
+          //             doc.data()['current location'].longitude) ==
+          //             origins[i]) {
+          //           print('Name ${doc.data()['name']}' 'Phone ${doc.data()['phone']}' 'ETA ${originElements[origins[i]]}',);
+          //           return Container(
+          //             decoration: BoxDecoration(
+          //               color: Colors.indigo,
+          //               border: Border.all(color: Colors.indigo,width: 4),
+          //               borderRadius: BorderRadius.circular(20),
+          //             ),
+          //             child: Column(
+          //               children: [
+          //                 Text('Name ${doc.data()['name']}',),
+          //                 const SizedBox(height: 5,),
+          //                 Text('Phone ${doc.data()['phone']}',),
+          //                 const SizedBox(height: 5,),
+          //                 Text('Car model ${doc.data()['car model']}',),
+          //                 const SizedBox(height: 5,),
+          //                 Text('ETA ${originElements[origins[i]]}',),
+          //                 const SizedBox(height: 5,),
+          //                 // Row(
+          //                 //   children: [
+          //                 //     ElevatedButton(onPressed: (){
+          //                 //
+          //                 //     }, child: const Text("Accept"))
+          //                 //   ],
+          //                 // )
+          //               ],
+          //
+          //             ),
+          //
+          //
+          //
+          //           );
+          //
+          //           // return QuickAlert.show(
+          //           //     context: ,
+          //           //     type: QuickAlertType.info,
+          //           //     title: 'Name ${doc.data()['name']}',
+          //           //     text: 'Car model ${doc.data()['car model']} ,'
+          //           //         'eta ${complexElements[destinations[i]]}');
+          //         }
+          //       }
+          //     });
+          //     break;
+          //   }
+          // }
     }
     selectedIndex1=serviceIndex;
     selectedIndex2=emergencyIndex;

@@ -221,9 +221,9 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                         content: Column(
                                                                                           mainAxisSize: MainAxisSize.min,
                                                                                           children: <Widget>[
-                                                                                            Text('Distance: ${complexElements[destinations[i]]}'),
+                                                                                            Text('Distance: '),
                                                                                             SizedBox(height: 10,
-                                                                                              child: Text('ETA: ${complexElements[destinations[i]]}'),
+                                                                                              child: Text('ETA: '),
                                                                                             ),],
                                                                                         ),
                                                                                         actions: <Widget>[
