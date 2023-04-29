@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../components/constants.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'drawer_screen.dart';
@@ -15,11 +17,30 @@ class ProviderMapScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return BlocConsumer<LocationCubit, LocationStates>(
-      listener: (context, state) {},
+      listener: (context, state)
+      {
+        if(state is GetCurrentLocationSuccess)
+          {
+            FirebaseFirestore.instance.collection('user').get().then((value) {
+              for(var doc in value.docs)
+              {
+                if(doc.data()['message']=='need help')
+                {
+                  QuickAlert.show(context: context, type: QuickAlertType.info,
+                      text: 'UserName ${doc.data()['name']},car type ${doc.data()['car type']},'
+                  );
+                }
+              }
+            });
+          }
+
+      },
       builder: (context, state) {
         var cubit = LocationCubit.get(context);
+
 
         print('uId $uId');
         print('mode $mode');
@@ -100,7 +121,7 @@ class ProviderMapScreen extends StatelessWidget {
                               ),
                               Text('Select the type of service',
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Serif')),
                             ],
@@ -317,9 +338,9 @@ class ProviderMapScreen extends StatelessWidget {
                       ElevatedButton(style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo
                       ),onPressed: () async {
-                        await cubit.getDistanceMatrix(context);
-                        print(cubit.providersUid.length);
-                         // providersUid.add(uId!);
+
+
+                        // providersUid.add(uId!);
 
                       }, child: const Text("Ready")),
                     ],

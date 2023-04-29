@@ -39,15 +39,22 @@ class LocationCubit extends Cubit<LocationStates> {
   var langProvider;
   String ?uidProvider=CacheHelper.getData(key:'uIdProvider' );
 LatLng ?lngUser,lngProvider;
-  List<DistanceMatrixElement> sortedElements = [];
+
   List<LatLng> origins = [];
   List<LatLng> destinations = [];
   Map<LatLng, String> complexElements = {};
   List<DistanceMatrixElement> elements = [];
   List<String>providersUid=[];
+  List<String> destinationStrings = [];
+  List<String> originStrings = [];
+  List<DistanceMatrixElement> sortedElements = [];
+
   Future<List<DistanceMatrixElement>> getDistanceMatrix(context) async {
-    List<String> destinationStrings = [];
-    List<String> originStrings = [];
+    sortedElements=[];
+    originStrings=[];
+    destinationStrings=[];
+    origins=[];
+    destinations=[];
     await FirebaseFirestore.instance.collection('user').get().then((value) {
       for (var doc in value.docs) {
         origins.add(LatLng(
@@ -76,10 +83,10 @@ LatLng ?lngUser,lngProvider;
     print(destinationStrings);
     print(originStrings);
     try {
-      Dio _dio =Dio();
+      Dio dio =Dio();
       const String baseUrl2 =
           'https://maps.googleapis.com/maps/api/distancematrix/json?';
-      final response = await _dio.get(baseUrl2,
+      final response = await dio.get(baseUrl2,
           options: Options(contentType: 'application/json'),
           queryParameters: {
             'origins': originStrings.join('|'),
@@ -125,7 +132,7 @@ LatLng ?lngUser,lngProvider;
               .compareTo(int.parse(b.duration.text.replaceAll(RegExp(r'[^0-9]'),
               '')))); // The sorted list of DistanceMatrixElement objects
 // Printing the sorted list to the console
-
+        await CacheHelper.saveStringData(key: 'sortedElements', value: sortedElements[0].duration.text);
         print('====================new ==================');
         for (var i = 0; i < destinations.length; i++) {
           if (sortedElements[0].duration.text ==
@@ -134,49 +141,33 @@ LatLng ?lngUser,lngProvider;
             FirebaseFirestore.instance
                 .collection('provider')
                 .get()
-                .then((value) {
+                .then((value)
+            {
+
               for (var doc in value.docs) {
                 if (LatLng(doc.data()['current location'].latitude,
                     doc.data()['current location'].longitude) ==
-                    destinations[i]) {
+                    destinations[i])
+                {
+                  return QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.info,
+                      title: 'provider name ${doc.data()['name']}',
+                      text: 'car model ${doc.data()['car model']} ,'
+                          'eta ${complexElements[destinations[i]]}');
                   providersUid.add(doc.data()['email']);
-                  emit(DirectionsSuccess());
                   for(int i=0; i<providersUid.length;i++) {
                     print(providersUid[i]);
-                    if ( uidProvider == providersUid[i]) {
+
+                    if ( uidProvider == doc.data()['email'])
+                    {
                       print("yes");
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context)
-                          {
-                            return AlertDialog(
-                              title: Text('Accept Request?'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: const <Widget>[
-                                  Text('Distance: '),
-                                  SizedBox(height: 10,),
-                                  Text('ETA: '),
-                                ],
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Reject'),
-                                  onPressed: () => Navigator.pop(context, false),
-                                ),
-                                TextButton(
-                                  child: const Text('Accept'),
-                                  onPressed: () => Navigator.pop(context, true),
-                                ),
-                              ],
-                            );
-                          }
-                      );
+
                     }
                     else{
                       print("NOOOO");
                       print(uidProvider);
-                      for(int i=0;i<=providersUid.length;i++) {
+                      for(int i=0;i<providersUid.length;i++) {
                         print(providersUid[i]);
                       }
                     }
@@ -187,17 +178,12 @@ LatLng ?lngUser,lngProvider;
                   //   title: 'Loading',
                   //   text: 'Searching for nearby providers',
                   // );
-                  // return QuickAlert.show(
-                  //     context: context,
-                  //     type: QuickAlertType.info,
-                  //     title: 'provider name ${doc.data()['name']}',
-                  //     text: 'car model ${doc.data()['car model']} ,'
-                  //         'eta ${complexElements[destinations[i]]}');
+
 
                 }
               }
             });
-            print('providers Uid length is ${providersUid.length}');
+
             break;
           }
         }
@@ -229,6 +215,7 @@ LatLng ?lngUser,lngProvider;
       getProviderLocation(uId, mode);
     }
   }
+
   getUserLocation(uId,mode)
   {
     {

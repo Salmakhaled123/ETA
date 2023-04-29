@@ -21,6 +21,7 @@ class RemovedSuccessfully extends LocationStates{}
 class EnglishState extends LocationStates{}
 class DirectionsSuccess extends LocationStates{}
 class RemoveItems extends LocationStates{}
+class AppearAlertSuccessToProvider extends LocationStates{}
 
 
 

@@ -1,10 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../components/constants.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
-import '../models/directions_repository.dart';
 import 'drawer_screen.dart';
 
 class MapScreen extends StatelessWidget {
@@ -426,6 +425,8 @@ class MapScreen extends StatelessWidget {
                                                                         () async {
 
                                                                       await cubit.getDistanceMatrix(context);
+                                                                     await FirebaseFirestore.instance.collection('user').doc(uId).set(
+                                                                          {'message':'need help'},SetOptions(merge: true));
                                                                     },
                                                                     style: ElevatedButton.styleFrom(
                                                                         shape: RoundedRectangleBorder(
