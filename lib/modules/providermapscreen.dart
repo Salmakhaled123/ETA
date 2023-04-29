@@ -210,41 +210,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                                                 model: cubit.emergencyItems[emergencyIndex],
                                                                                 serviceName: cubit.emergencyItems[emergencyIndex].name,
                                                                                 emergencyIndex: emergencyIndex);
-                                                                                for(int i=0;i<=providersUid.length;i++) {
-                                                                                  if (reqButton > 0 && uId == providersUid[i]) {
-                                                                                    showDialog(
-                                                                                        context: context,
-                                                                                        builder: (BuildContext context)
-                                                                                    {
-                                                                                      return AlertDialog(
-                                                                                        title: Text('Accept Request?'),
-                                                                                        content: Column(
-                                                                                          mainAxisSize: MainAxisSize.min,
-                                                                                          children: <Widget>[
-                                                                                            Text('Distance: '),
-                                                                                            SizedBox(height: 10,
-                                                                                              child: Text('ETA: '),
-                                                                                            ),],
-                                                                                        ),
-                                                                                        actions: <Widget>[
-                                                                                          TextButton(
-                                                                                            child: Text('Reject'),
-                                                                                            onPressed: () => Navigator.pop(context, false),
-                                                                                          ),
-                                                                                          TextButton(
-                                                                                            child: Text('Accept'),
-                                                                                            onPressed: () => Navigator.pop(context, true),
-                                                                                          ),
-                                                                                        ],
-                                                                                      );
-                                                                                    }
-                                                                                    );
-                                                                                  }
-                                                                                  else{
-                                                                                    print(uId);
-                                                                                    print(reqButton);
-                                                                                  }
-                                                                                }
+
 
                                                                               },
                                                                               child: Padding(
@@ -331,12 +297,15 @@ class ProviderMapScreen extends StatelessWidget {
                                                                       .w600,
                                                                   fontFamily:
                                                                   'Serif'),
-                                                            )
+                                                            ),
+
                                                           ],
                                                         ),
                                                       ),
                                                     );
-                                                  })),
+                                                  }
+                                                  ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -345,6 +314,14 @@ class ProviderMapScreen extends StatelessWidget {
                           },
                         ),
                       ),
+                      ElevatedButton(style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo
+                      ),onPressed: () async {
+                        await cubit.getDistanceMatrix(context);
+                        print(cubit.providersUid.length);
+                         // providersUid.add(uId!);
+
+                      }, child: const Text("Ready")),
                     ],
                   ),
                 ),

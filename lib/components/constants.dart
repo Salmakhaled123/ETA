@@ -4,9 +4,9 @@ import '../models/distance_matrix_model.dart';
 // List<LatLng> polylineCoordinates = [
 // ];
 int reqButton =0;
-Map<LatLng, String> originElements = {};
+// Map<LatLng, String> originElements = {};
 List<String>emails=[];
-List<String>providersUid=[];
+
 List<String>modess= [];
 dynamic modes;
 

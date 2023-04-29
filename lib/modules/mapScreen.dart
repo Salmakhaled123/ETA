@@ -424,13 +424,8 @@ class MapScreen extends StatelessWidget {
                                                                       ElevatedButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      DirectionsRepository
-                                                                          repo =
-                                                                          DirectionsRepository();
-                                                                      await repo
-                                                                          .getDistanceMatrix(
-                                                                              context);
-                                                                      reqButton++;
+
+                                                                      await cubit.getDistanceMatrix(context);
                                                                     },
                                                                     style: ElevatedButton.styleFrom(
                                                                         shape: RoundedRectangleBorder(
