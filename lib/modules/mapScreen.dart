@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,7 +24,7 @@ class MapScreen extends StatelessWidget {
         double mediaWidth = MediaQuery.of(context).size.height;
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.indigo,
+            backgroundColor: Colors.teal,
             title: Text(
               'My Current Location',
               style: TextStyle(color: Colors.white),
@@ -125,7 +126,7 @@ class MapScreen extends StatelessWidget {
                       );
                     },
                     child: CircleAvatar(
-                      backgroundColor: Colors.indigo,
+                      backgroundColor: Colors.teal,
                       radius: 20,
                       child:
                           Icon(Icons.location_searching, color: Colors.white),
@@ -144,7 +145,7 @@ class MapScreen extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50.0)),
-                              backgroundColor: Colors.indigo),
+                              backgroundColor: Colors.teal),
                           child: Row(
                             children: [
                               Icon(Icons.arrow_upward_outlined),
@@ -293,7 +294,7 @@ class MapScreen extends StatelessWidget {
                                                                       style: ElevatedButton.styleFrom(
                                                                           shape:
                                                                               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-                                                                          backgroundColor: Colors.indigo),
+                                                                          backgroundColor: Colors.teal),
                                                                       child: Text(
                                                                           'Request',
                                                                           style: TextStyle(
@@ -423,17 +424,28 @@ class MapScreen extends StatelessWidget {
                                                                       ElevatedButton(
                                                                     onPressed:
                                                                         () async {
-
-                                                                      await cubit.getDistanceMatrix(context);
-                                                                     await FirebaseFirestore.instance.collection('user').doc(uId).set(
-                                                                          {'message':'need help'},SetOptions(merge: true));
+                                                                      print(
+                                                                          'uidProvider is ${FirebaseAuth.instance.currentUser?.email} ');
+                                                                      await cubit
+                                                                          .getDistanceMatrix(
+                                                                              context);
+                                                                      await FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'user')
+                                                                          .doc(
+                                                                              uId)
+                                                                          .set({
+                                                                        'message':
+                                                                            'need help'
+                                                                      }, SetOptions(merge: true));
                                                                     },
                                                                     style: ElevatedButton.styleFrom(
                                                                         shape: RoundedRectangleBorder(
                                                                             borderRadius: BorderRadius.circular(
                                                                                 50.0)),
                                                                         backgroundColor:
-                                                                            Colors.indigo),
+                                                                            Colors.teal),
                                                                     child: Text(
                                                                         'Request',
                                                                         style: TextStyle(
@@ -803,7 +815,7 @@ class MapScreen extends StatelessWidget {
                                                                             borderRadius: BorderRadius.circular(
                                                                                 50.0)),
                                                                         backgroundColor:
-                                                                            Colors.indigo),
+                                                                            Colors.teal),
                                                                     child: Text(
                                                                         'Request',
                                                                         style: TextStyle(
@@ -937,7 +949,7 @@ class MapScreen extends StatelessWidget {
                                                                             borderRadius: BorderRadius.circular(
                                                                                 50.0)),
                                                                         backgroundColor:
-                                                                            Colors.indigo),
+                                                                            Colors.teal),
                                                                     child: Text(
                                                                         'Request',
                                                                         style: TextStyle(
@@ -1071,7 +1083,7 @@ class MapScreen extends StatelessWidget {
                                                                             borderRadius: BorderRadius.circular(
                                                                                 50.0)),
                                                                         backgroundColor:
-                                                                            Colors.indigo),
+                                                                            Colors.teal),
                                                                     child: Text(
                                                                         'Request',
                                                                         style: TextStyle(

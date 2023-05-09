@@ -8,103 +8,101 @@ import '../components/components.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-class DrawerPart extends StatelessWidget
-{
-  String uId,mode;
-  DrawerPart({required this.mode,required this.uId});
+class DrawerPart extends StatelessWidget {
+  String uId, mode;
+  DrawerPart({required this.mode, required this.uId});
   @override
-  Widget build(BuildContext context)
-  {
-    String ?emailUser=CacheHelper.getData(key: 'uIdUser');
-    String  ?nameUser=CacheHelper.getData(key: 'nameUser');
-    String ?emailProvider=CacheHelper.getData(key: 'uIdProvider');
-    String  ?nameProvider=CacheHelper.getData(key: 'nameProvider');
-
+  Widget build(BuildContext context) {
+    String? emailUser = CacheHelper.getData(key: 'uIdUser');
+    String? nameUser = CacheHelper.getData(key: 'nameUser');
+    String? emailProvider = CacheHelper.getData(key: 'uIdProvider');
+    String? nameProvider = CacheHelper.getData(key: 'nameProvider');
 
     var cubit = LocationCubit.get(context);
-    return BlocConsumer<LocationCubit,LocationStates>(listener:(context,state){} ,
-      builder: (context,state){
+    return BlocConsumer<LocationCubit, LocationStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
         return Drawer(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-              [
-                uId==emailUser?
-                UserAccountsDrawerHeader (
-                    decoration: BoxDecoration(color: Colors.indigo),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            uId == emailUser
+                ? UserAccountsDrawerHeader(
+                    decoration: const BoxDecoration(color: Colors.teal),
                     accountName: Text(nameUser!),
                     accountEmail: Text(emailUser!),
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: Colors.pink,
                       child: Text(
                         nameUser[0].toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Colors.white),
                       ),
-                    )):
-                UserAccountsDrawerHeader (
-                    decoration: BoxDecoration(color: Colors.indigo),
+                    ))
+                : UserAccountsDrawerHeader(
+                    decoration: const BoxDecoration(color: Colors.teal),
                     accountName: Text(nameProvider!),
                     accountEmail: Text(emailProvider!),
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: Colors.pink,
                       child: Text(
                         nameProvider[0].toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Colors.white),
                       ),
-                    ))
-               ,
-                buildDrawerItem(
-                  cubit.screensByDrawer, cubit.drawerIcons, context,),
+                    )),
+            buildDrawerItem(
+              cubit.screensByDrawer,
+              cubit.drawerIcons,
+              context,
+            ),
+            SwitchListTile(
+              value: cubit.isDark,
+              onChanged: (val) {
+                cubit.changeMood(context);
+              },
+              title: const Text('Theme',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              activeColor: Colors.teal,
+              secondary: const Icon(Icons.nightlight),
+            ),
+            ListTile(
+                title: const Text('log out',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                leading: const Icon(Icons.logout, size: 30),
+                onTap: () async {
+                  if (mode == 'provider') {
+                    cubit.selectedIndex1 = -1;
+                    cubit.selectedIndex2 = -1;
+                  }
 
-                SwitchListTile(
-                  value: cubit.isDark,
-                  onChanged: (val)
-                  {
-                    cubit.changeMood(context);
-                  },
-                  title: Text('Theme',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                  activeColor: Colors.indigo,
-                  secondary: Icon(Icons.nightlight),
-                ),
-                ListTile(title: Text('log out',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),leading: Icon(Icons.logout,size: 30),onTap: ()async
-                {
-
-                   if(mode=='provider')
-                     {
-                       cubit.selectedIndex1=-1;
-                       cubit.selectedIndex2=-1;
-
-                     }
-
-                await FirebaseAuth.instance.signOut();
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
                 }),
-                Center(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProviderMapScreen(mode: mode,
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProviderMapScreen(
+                                  mode: mode,
                                   uId: uId,
                                 )));
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo)),
-                      child: Text('Provider mode')),
-                ),
-
-              ],
-            ));
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: const Text('Provider mode')),
+            ),
+          ],
+        ));
       },
-
     );
   }
 }

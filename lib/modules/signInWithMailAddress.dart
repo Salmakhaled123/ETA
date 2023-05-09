@@ -1,51 +1,57 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
+import 'package:etaproject/modules/login_choose.dart';
 import 'package:etaproject/modules/providermapscreen.dart';
 import 'package:etaproject/modules/signUpWithMailAddress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../cache/shared_pref.dart';
 import '../cubit/cubit.dart';
-import '../utiles/showSnackBar.dart';
+import '../utiles/showToast.dart';
 import 'mapScreen.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
-class _LoginScreenState extends State<LoginScreen>
-{
-  SignIn() async {
 
+class _LoginScreenState extends State<LoginScreen> {
+  SignIn() async {
     {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: emailController.text, password: passController.text);
-        var cubit= LocationCubit.get(context);
-        cubit.lngUser=null;
-        cubit.info=null;
-        String ? modeUser=CacheHelper.getData(key: 'modeUser');
-        String ?uidUser=CacheHelper.getData(key: 'uIdUser');
-        String ? modeProvider=CacheHelper.getData(key: 'modeProvider');
-        String ? uidProvider=CacheHelper.getData(key: 'uIdProvider');
+        var cubit = LocationCubit.get(context);
+        cubit.lngUser = null;
+        cubit.info = null;
+        String? modeUser = CacheHelper.getData(key: 'modeUser');
+        String? uidUser = CacheHelper.getData(key: 'uIdUser');
+        String? modeProvider = CacheHelper.getData(key: 'modeProvider');
+        String? uidProvider = CacheHelper.getData(key: 'uIdProvider');
 
-        if( modeUser=='user' && uidUser==emailController.text )
-        {
-
+        if (modeUser == 'user' && uidUser == emailController.text) {
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => MapScreen(mode: modeUser,
-                uId:uidUser,email: emailController.text,)),
-                  (route) => false);
-        }
-        else if(modeProvider=='provider' && uidProvider==emailController.text)
+              MaterialPageRoute(
+                  builder: (context) => MapScreen(
+                        mode: modeUser,
+                        uId: uidUser,
+                        email: emailController.text,
+                      )),
+              (route) => false);
+        } else if (modeProvider == 'provider' &&
+            uidProvider == emailController.text)
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => ProviderMapScreen(mode: modeProvider,
-                uId:uidProvider,)),
-                  (route) => false);
-        return userCredential
-        ;
-      } on FirebaseAuthException catch(e){
-        showSnackBar(context, e.message!);
+              MaterialPageRoute(
+                  builder: (context) => ProviderMapScreen(
+                        mode: modeProvider,
+                        uId: uidProvider,
+                      )),
+              (route) => false);
+        return userCredential;
+      } on FirebaseAuthException catch (e) {
+        showToast(e.message!);
       }
     }
   }
@@ -58,147 +64,165 @@ class _LoginScreenState extends State<LoginScreen>
 
   var formKey1 = GlobalKey<FormState>();
   @override
-  void initState()
-  {
-
+  void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:(){
+      onTap: () {
         focusPassword.unfocus();
         focusEmail.unfocus();
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('Login With Email',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Serif',color: Colors.white)),
-          backgroundColor: Colors.indigo,
-        ),
-        body:
-        SingleChildScrollView(
-          child:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+        body: SingleChildScrollView(
+          child: Stack(
             children: <Widget>[
-          const SizedBox(height: 40,),
-          const Image(image: AssetImage('assets/emailLogin.png'),width: 270,),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
-            child: TextFormField(
-              controller: emailController,
-              focusNode: focusEmail,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12)
-                ),
-                hintText: "Email",
-                hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.indigo),
-                focusedBorder: OutlineInputBorder(borderSide:
-                const BorderSide(color: Colors.indigo),
-                    borderRadius: BorderRadius.circular(12)),
-                fillColor: Colors.grey.shade100,
-                filled: true,
-
+              const Padding(
+                padding: EdgeInsets.all(65.0),
+                child: Image(
+                    image: AssetImage('assets/emailLogin.png'),
+                    fit: BoxFit.fill),
               ),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
-            child: TextFormField(
-              controller: passController,
-              focusNode: focusPassword,
-              obscureText: !_passwordVisible,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12)
-                ),
-                hintText: "Password",
-                hintStyle: const TextStyle(fontFamily: 'Serif',color: Colors.indigo),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _passwordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: Colors.indigo,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 330, 0),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginChoose()));
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_sharp,
+                        color: Colors.teal, size: 35)),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(7, 330, 7, 10),
+                child: BlurryContainer(
+                  blur: 5,
+                  color: Colors.teal.withOpacity(0.2),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: TextFormField(
+                          controller: emailController,
+                          focusNode: focusEmail,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(30)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Colors.teal),
+                                borderRadius: BorderRadius.circular(10)),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: const Icon(Icons.mail_outline_rounded,
+                                color: Colors.teal),
+                            labelText: 'Email',
+                            labelStyle: const TextStyle(
+                                color: Colors.teal, fontSize: 17),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: TextFormField(
+                          controller: passController,
+                          focusNode: focusPassword,
+                          obscureText: !_passwordVisible,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(30)),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.teal,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Colors.teal),
+                                borderRadius: BorderRadius.circular(10)),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: const Icon(Icons.lock_outline_rounded,
+                                color: Colors.teal),
+                            labelText: 'Password',
+                            labelStyle: const TextStyle(
+                                color: Colors.teal, fontSize: 17),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                          ),
+                          onPressed: () async {
+                            await SignIn();
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.fromLTRB(120, 15, 120, 15),
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 70,
+                          ),
+                          const Text("Don't have an account? ",
+                              style:
+                                  TextStyle(fontSize: 17, color: Colors.teal)),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()));
+                            },
+                            child: const Text(
+                              'Sign up',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: Color(0xff00695c),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
                 ),
-                focusedBorder: OutlineInputBorder(borderSide:
-                const BorderSide(color: Colors.indigo),
-                    borderRadius: BorderRadius.circular(12)),
-                fillColor: Colors.grey.shade100,
-                filled: true,
-
               ),
-            ),
+            ],
           ),
-          const SizedBox(height: 15,),
-
-
-                SizedBox(
-                  height: 10,
-                ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),),
-
-                    onPressed: () async
-                    {
-                      await SignIn();
-
-                    },
-
-                child:const Padding(
-                  padding: EdgeInsets.only(left: 15,right: 15,top: 10,bottom: 10),
-                  child: Text('Login',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Serif',color: Colors.white)),
-
-                ),),
-              Row(
-                children: [
-                  const SizedBox(width: 30,),
-                  Text("if you don't have an  account ",
-                      style: TextStyle(fontSize: 16)),
-                  TextButton(
-                    onPressed: () async {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()));
-                    },
-                    child: const Text(
-                      'click here',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          color: Colors.indigo,
-                          decoration: TextDecoration.underline),
-                    ),
-                  )
-                ],
-              ),
-              ]),
-            ),
-          ),
+        ),
+      ),
     );
-
   }
 }

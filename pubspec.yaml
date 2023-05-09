@@ -34,7 +34,7 @@ dependencies:
   bloc: ^8.1.0
   flutter_bloc: ^8.1.1
   awesome_dialog: ^3.0.2
-  pinput: ^2.2.18
+  pinput: ^2.2.31
   shared_preferences: ^2.0.20
   quickalert: ^1.0.1
   dio: ^5.0.2
@@ -47,6 +47,7 @@ dependencies:
   google_maps_flutter: ^2.2.1
   geolocator: ^9.0.2
   flutter_polyline_points: ^1.0.0
+  blurrycontainer: ^1.0.2
 
 
 
