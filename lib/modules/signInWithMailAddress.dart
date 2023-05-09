@@ -87,8 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     fit: BoxFit.fill),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 330, 0),
-                child: IconButton(
+                padding: const EdgeInsets.only(top: 15),
+                child: IconButton(alignment: Alignment.topLeft,
                     onPressed: () {
                       Navigator.pushReplacement(
                           context,
@@ -171,32 +171,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          onPressed: () async {
-                            await SignIn();
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.fromLTRB(120, 15, 120, 15),
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(fontSize: 17),
+                        child: SizedBox(height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.teal,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                            ),
+                            onPressed: () async {
+                              await SignIn();
+                            },
+                            child: Center(
+                              child: Text(
+                                'Sign In',
+                                style: TextStyle(fontSize: 17),
+                              ),
                             ),
                           ),
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(
-                            width: 70,
-                          ),
                           const Text("Don't have an account? ",
                               style:
-                                  TextStyle(fontSize: 17, color: Colors.teal)),
+                                  TextStyle(fontSize: 17, color: Color(0xff455a64))),
                           TextButton(
                             onPressed: () {
                               Navigator.pushReplacement(
@@ -209,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,
-                                color: Color(0xff00695c),
+                                color: Colors.teal,
                               ),
                             ),
                           ),

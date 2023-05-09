@@ -37,8 +37,8 @@ class _PhoneScreenState extends State<PhoneScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 330, 0),
-                child: IconButton(
+                padding: const EdgeInsets.only(top: 15),
+                child: IconButton(alignment: Alignment.topLeft,
                     onPressed: () {
                       Navigator.pushReplacement(
                           context,
@@ -83,42 +83,43 @@ class _PhoneScreenState extends State<PhoneScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          onPressed: () async {
-                            await FirebaseAuth.instance.verifyPhoneNumber(
-                              phoneNumber: '+2${phoneController.text}',
-                              verificationCompleted:
-                                  (PhoneAuthCredential credential) {},
-                              verificationFailed: (FirebaseAuthException e) {
-                                if (e.code == 'invalid-phone-number') {
-                                  showToast(
-                                      'The provided phone number is not valid.');
-                                }
-                              },
-                              codeSent: (String verificationId,
-                                  int? resendToken) async {
-                                PhoneScreen.verify = verificationId;
-                                PhoneScreen.phone = phoneController.text;
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => MyVerify(),
-                                  ),
-                                );
-                              },
-                              codeAutoRetrievalTimeout:
-                                  (String verificationId) {},
-                            );
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.fromLTRB(110, 15, 110, 15),
-                            child: Text(
-                              'Send OTP',
-                              style: TextStyle(fontSize: 17),
+                        child: SizedBox(height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.teal,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                            ),
+                            onPressed: () async {
+                              await FirebaseAuth.instance.verifyPhoneNumber(
+                                phoneNumber: '+2${phoneController.text}',
+                                verificationCompleted:
+                                    (PhoneAuthCredential credential) {},
+                                verificationFailed: (FirebaseAuthException e) {
+                                  if (e.code == 'invalid-phone-number') {
+                                    showToast(
+                                        'The provided phone number is not valid.');
+                                  }
+                                },
+                                codeSent: (String verificationId,
+                                    int? resendToken) async {
+                                  PhoneScreen.verify = verificationId;
+                                  PhoneScreen.phone = phoneController.text;
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MyVerify(),
+                                    ),
+                                  );
+                                },
+                                codeAutoRetrievalTimeout:
+                                    (String verificationId) {},
+                              );
+                            },
+                            child: const Center(
+                              child: Text(
+                                'Send OTP',
+                                style: TextStyle(fontSize: 17),
+                              ),
                             ),
                           ),
                         ),

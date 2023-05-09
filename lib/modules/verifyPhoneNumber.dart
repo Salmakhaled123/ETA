@@ -92,47 +92,48 @@ class _MyVerifyState extends State<MyVerify> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
-                        onPressed: () async {
-                          PhoneAuthCredential credential =
-                              PhoneAuthProvider.credential(
-                                  verificationId: PhoneScreen.verify,
-                                  smsCode: MyVerify.code);
-                          UserCredential userCred =
-                              await auth.signInWithCredential(credential);
-                          if (userCred.additionalUserInfo?.isNewUser != true) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => MapScreen(
-                                  mode: modes,
-                                  uId: PhoneScreen.phone,
+                      child: SizedBox(height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                          ),
+                          onPressed: () async {
+                            PhoneAuthCredential credential =
+                                PhoneAuthProvider.credential(
+                                    verificationId: PhoneScreen.verify,
+                                    smsCode: MyVerify.code);
+                            UserCredential userCred =
+                                await auth.signInWithCredential(credential);
+                            if (userCred.additionalUserInfo?.isNewUser != true) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => MapScreen(
+                                    mode: modes,
+                                    uId: PhoneScreen.phone,
+                                  ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    phoneRegister(),
-                              ),
-                            );
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(110, 15, 110, 15),
-                          child: const Text('Confirm',
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Serif',
-                                  color: Colors.white)),
+                              );
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      phoneRegister(),
+                                ),
+                              );
+                            }
+                          },
+                          child: const Center(
+                            child: Text('Confirm',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Serif',
+                                    color: Colors.white)),
+                          ),
                         ),
                       ),
                     ),

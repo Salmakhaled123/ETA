@@ -237,56 +237,57 @@ class _phoneRegisterState extends State<phoneRegister> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          onPressed: () {
-                            if (nameController.text.isEmpty) {
-                              showToast('Name Can/t be empty');
-                            } else if (phoneController.text.isEmpty) {
-                              showToast('Phone Can/t be empty');
-                            } else if (!phoneRegExp
-                                .hasMatch(phoneController.text!)) {
-                              showToast('Enter the correct phone number');
-                            } else if (carModelController.text.isEmpty) {
-                              showToast('Car Model Can/t be empty');
-                            } else if (carTypeController.text.isEmpty) {
-                              showToast('Car Type Can/t be empty');
-                            } else if (licController.text.isEmpty) {
-                              showToast('Licence Can/t be empty');
-                            } else if (!licRegExp
-                                .hasMatch(licController.text!)) {
-                              showToast('Enter the correct License number');
-                            } else {
-                              FirebaseFirestore.instance
-                                  .collection(modes)
-                                  .doc(phoneController.text)
-                                  .set({
-                                'name': nameController.text,
-                                'phone': phoneController.text,
-                                'car model': carModelController.text,
-                                'car type': carTypeController.text,
-                                'license': licController.text,
-                              }, SetOptions(merge: true));
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => MapScreen(
-                                    mode: modes,
-                                    uId: phoneController.text,
+                        child: SizedBox(height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.teal,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                            ),
+                            onPressed: () {
+                              if (nameController.text.isEmpty) {
+                                showToast('Name Can/t be empty');
+                              } else if (phoneController.text.isEmpty) {
+                                showToast('Phone Can/t be empty');
+                              } else if (!phoneRegExp
+                                  .hasMatch(phoneController.text!)) {
+                                showToast('Enter the correct phone number');
+                              } else if (carModelController.text.isEmpty) {
+                                showToast('Car Model Can/t be empty');
+                              } else if (carTypeController.text.isEmpty) {
+                                showToast('Car Type Can/t be empty');
+                              } else if (licController.text.isEmpty) {
+                                showToast('Licence Can/t be empty');
+                              } else if (!licRegExp
+                                  .hasMatch(licController.text!)) {
+                                showToast('Enter the correct License number');
+                              } else {
+                                FirebaseFirestore.instance
+                                    .collection(modes)
+                                    .doc(phoneController.text)
+                                    .set({
+                                  'name': nameController.text,
+                                  'phone': phoneController.text,
+                                  'car model': carModelController.text,
+                                  'car type': carTypeController.text,
+                                  'license': licController.text,
+                                }, SetOptions(merge: true));
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => MapScreen(
+                                      mode: modes,
+                                      uId: phoneController.text,
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.fromLTRB(120, 15, 120, 15),
-                            child: Text(
-                              'Sign up',
-                              style: TextStyle(fontSize: 17),
+                                );
+                              }
+                            },
+                            child: const Center(
+                              child: Text(
+                                'Sign up',
+                                style: TextStyle(fontSize: 17),
+                              ),
                             ),
                           ),
                         ),

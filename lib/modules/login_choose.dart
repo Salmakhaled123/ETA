@@ -16,20 +16,18 @@ class _LoginChooseState extends State<LoginChoose> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
+      body: SingleChildScrollView(
+        child: Stack(
         children: [
           const Padding(
             padding: EdgeInsets.all(65.0),
             child: Image(
                 image: AssetImage('assets/CarServices.png'), fit: BoxFit.fill),
           ),
-          Center(
+          const Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 260),
-              child: ListView(
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.only(left: 135),
+              padding: EdgeInsets.only(top: 260),
+
                     child: Text(
                       'Go With',
                       style: TextStyle(
@@ -39,6 +37,7 @@ class _LoginChooseState extends State<LoginChoose> {
                           color: Colors.teal),
                     ),
                   ),
+          ),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -54,7 +53,7 @@ class _LoginChooseState extends State<LoginChoose> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(15),
+                            padding: const EdgeInsets.fromLTRB(15, 335, 15, 5),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.teal,
@@ -139,12 +138,11 @@ class _LoginChooseState extends State<LoginChoose> {
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),
-          ),
-        ],
-      ),
     );
+
   }
 }
