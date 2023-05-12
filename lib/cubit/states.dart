@@ -22,7 +22,10 @@ class EnglishState extends LocationStates{}
 class DirectionsSuccess extends LocationStates{}
 class RemoveItems extends LocationStates{}
 class AppearAlertSuccessToProvider extends LocationStates{}
-
-
+class DataContainerVisibility extends LocationStates{}
+class DataContainerUserVisibility extends LocationStates{}
+class ServiceButtonsVisibility extends LocationStates{}
+class PasswordVisibility extends LocationStates{}
+class ConfirmPasswordVisibility extends LocationStates{}
 
 

@@ -1,17 +1,11 @@
 import 'package:etaproject/modules/signInWithMailAddress.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'Phone_Login.dart';
 
-class LoginChoose extends StatefulWidget {
+class LoginChoose extends StatelessWidget {
   const LoginChoose({Key? key}) : super(key: key);
 
-  @override
-  State<LoginChoose> createState() => _LoginChooseState();
-}
-
-class _LoginChooseState extends State<LoginChoose> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +42,7 @@ class _LoginChooseState extends State<LoginChoose> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const PhoneScreen(),
+                                builder: (context) => PhoneScreen(),
                               ),
                             );
                           },
@@ -135,14 +129,14 @@ class _LoginChooseState extends State<LoginChoose> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                          ],
+                          ),
+                          ),
+    ],
+                          ),
+                        )
 
-                ],
-              ),
-            ),
-    );
+                    );
 
   }
 }

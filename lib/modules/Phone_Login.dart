@@ -5,19 +5,14 @@ import 'package:flutter/material.dart';
 import '../utiles/showToast.dart';
 import 'login_choose.dart';
 
-class PhoneScreen extends StatefulWidget {
+class PhoneScreen extends StatelessWidget {
   static String verify = "";
   static String phone = "";
-  const PhoneScreen({super.key});
-  @override
-  State<PhoneScreen> createState() => _PhoneScreenState();
-}
+  PhoneScreen({Key? key}) : super(key: key);
 
-class _PhoneScreenState extends State<PhoneScreen> {
   final phoneController = TextEditingController();
   final countryController = TextEditingController();
   final focusPhone = FocusNode();
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

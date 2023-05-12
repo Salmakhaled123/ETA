@@ -5,19 +5,11 @@ import 'package:etaproject/modules/phone-Registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-
 import 'Phone_Login.dart';
 import 'mapScreen.dart';
 
-class MyVerify extends StatefulWidget {
-  static var code = "";
-  const MyVerify({Key? key}) : super(key: key);
-
-  @override
-  State<MyVerify> createState() => _MyVerifyState();
-}
-
-class _MyVerifyState extends State<MyVerify> {
+class MyVerify extends StatelessWidget {
+  static var code = "";MyVerify({Key? key}) : super(key: key);
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -143,7 +135,7 @@ class _MyVerifyState extends State<MyVerify> {
                           context,
                           MaterialPageRoute<void>(
                               builder: (BuildContext context) =>
-                                  const PhoneScreen()),
+                                  PhoneScreen()),
                           ModalRoute.withName('/'),
                         );
                       },
