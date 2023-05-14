@@ -23,7 +23,7 @@ class ProviderMapScreen extends StatelessWidget {
     return BlocConsumer<LocationCubit, LocationStates>(
       listener: (context, state) {
         // if (state is GetCurrentLocationSuccess) {
-        //   FirebaseFirestore.instance.collection('user').get().then((value) {
+        //   Firebasetore.instance.collection('user').get().then((value) {
         //     for (var doc in value.docs) {
         //       if (doc.data()['message'] == 'need help') {
         //         QuickAlert.show(

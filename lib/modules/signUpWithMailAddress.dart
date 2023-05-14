@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool _confPasswordVisible = false;
   bool _passwordVisible = false;
-
+  bool containerVisibility = false;
   late UserCredential response;
 
   var formKey = GlobalKey<FormState>();
@@ -93,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'car model': carModelController.text,
           'car type': carTypeController.text,
           'license': licController.text,
+          'container visibility' : containerVisibility,
         }, SetOptions(merge: true));
         showToast("signed up successfully");
         if (modes == 'provider') {

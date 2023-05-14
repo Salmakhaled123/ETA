@@ -11,22 +11,21 @@ import 'package:quickalert/quickalert.dart';
 import '../models/directions_model.dart';
 import '../models/directions_repository.dart';
 import '../models/distance_matrix_model.dart';
-
 class LocationCubit extends Cubit<LocationStates> {
   LocationCubit() : super(LocationInitialState());
   static LocationCubit get(context) => BlocProvider.of(context);
   GoogleMapController? mapController1;
   bool ContainerShowen =false;
-  bool ContainerShowenInUser =false;
   bool ButtonsShowen =true;
   bool passwordVisible = false;
   bool confirmPasswordVisible = false;
-int vis =0;
+
 
   void isPasswordVisible() {
     passwordVisible = !passwordVisible;
     emit(PasswordVisibility());
   }
+
 
   void isConfirmPasswordVisible() {
     confirmPasswordVisible = !confirmPasswordVisible;
@@ -35,14 +34,9 @@ int vis =0;
 
   isDataContainerShowen(){
     ContainerShowen= !ContainerShowen;
-    vis++;
     emit(DataContainerVisibility());
   }
-  isDataContainerUserShowen(){
-    ContainerShowen= !ContainerShowen;
-    vis++;
-    emit(DataContainerVisibility());
-  }
+
   isServiceButtonsShowen(){
     ButtonsShowen= !ButtonsShowen;
     emit(ServiceButtonsVisibility());
