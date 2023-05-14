@@ -32,13 +32,22 @@ class LocationCubit extends Cubit<LocationStates> {
     emit(ConfirmPasswordVisibility());
   }
 
-  isDataContainerShowen(){
+  isDataContainerShowen({uid, mode}){
+
     ContainerShowen= !ContainerShowen;
+    FirebaseFirestore.instance.collection(mode).doc(uid).set({
+'ContainerShowen':ContainerShowen
+    },SetOptions(merge: true));
     emit(DataContainerVisibility());
   }
 
-  isServiceButtonsShowen(){
+
+
+  isServiceButtonsShowen({uid, mode}){
     ButtonsShowen= !ButtonsShowen;
+    FirebaseFirestore.instance.collection(mode).doc(uid).set({
+      'ButtonsShowen':ContainerShowen
+    },SetOptions(merge: true));
     emit(ServiceButtonsVisibility());
   }
   

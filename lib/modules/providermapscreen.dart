@@ -357,8 +357,9 @@ class ProviderMapScreen extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 20, 50, 20),
                                     child: ElevatedButton(onPressed: (){
-                                      LocationCubit.get(context).isDataContainerShowen();
-                                      LocationCubit.get(context).isServiceButtonsShowen();
+                                      LocationCubit.get(context).isDataContainerShowen(uid: uId,mode: mode);
+                                      LocationCubit.get(context).isServiceButtonsShowen(uid: uId,mode: mode);
+
                                       QuickAlert.show(
                                         title: 'Payment',
                                           barrierDismissible:false,
@@ -409,8 +410,8 @@ class ProviderMapScreen extends StatelessWidget {
                                     confirmBtnColor: Colors.teal,
                                     onConfirmBtnTap: () =>{
                                     //Navigator.pop(context),
-                                    LocationCubit.get(context).isServiceButtonsShowen(),
-                                      LocationCubit.get(context).isDataContainerShowen(),
+                                    LocationCubit.get(context).isServiceButtonsShowen(mode: mode,uid: uId),
+                                      LocationCubit.get(context).isDataContainerShowen(mode: mode,uid: uId),
                                     },);
                                   }, child: const Text('Cancel'),),
                                 ],
