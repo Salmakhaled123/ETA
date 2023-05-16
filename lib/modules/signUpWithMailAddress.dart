@@ -93,7 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
           'car model': carModelController.text,
           'car type': carTypeController.text,
           'license': licController.text,
-          'container visibility' : containerVisibility,
+          'ContainerShowen' : containerVisibility,
+          'ServiceDone' : containerVisibility,
         }, SetOptions(merge: true));
         showToast("signed up successfully");
         if (modes == 'provider') {

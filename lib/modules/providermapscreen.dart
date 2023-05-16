@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -12,6 +13,7 @@ import 'drawer_screen.dart';
 class ProviderMapScreen extends StatelessWidget {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String? uId, name, mode, email;
+
   ProviderMapScreen({
     this.mode,
     required this.uId,
@@ -151,6 +153,8 @@ class ProviderMapScreen extends StatelessWidget {
         // }
       },
       builder: (context, state) {
+        LocationCubit.get(context).updatingTheContainerBooleanByUser(uid: uId);
+        LocationCubit.get(context).updatingTheButtonsBooleanByUser(uid:uId);
         var cubit = LocationCubit.get(context);
 
         print('uId $uId');
@@ -244,7 +248,7 @@ class ProviderMapScreen extends StatelessWidget {
                                   DefaultTextStyle(style: const TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold,color: Colors.black),child:Text(
-                                    '${['name']}',
+                                    '${LocationCubit.get(context).userName}',
                                   ),
                                   ),
                                 ],
@@ -262,7 +266,7 @@ class ProviderMapScreen extends StatelessWidget {
                                   ),
                                   SizedBox(width: MediaQuery.of(context).size.width/3.7,),
                                   ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.white),onPressed:()async{
-                                    await FlutterPhoneDirectCaller.callNumber(number);
+                                    await FlutterPhoneDirectCaller.callNumber(LocationCubit.get(context).userPhone);
                                   }, child: Row(children: [
                                     Icon(Icons.call,size: 20,color: Colors.teal,),
                                     Text(' Call',style: TextStyle(color: Colors.teal),)
@@ -285,7 +289,7 @@ class ProviderMapScreen extends StatelessWidget {
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold),
                                       child: Text(
-                                        '${['car type']}',
+                                        '${LocationCubit.get(context).userCarType}',
                                       )
 
                                   ),
@@ -345,7 +349,7 @@ class ProviderMapScreen extends StatelessWidget {
                                 ),
                                 DefaultTextStyle(style: const TextStyle(
                                     fontSize: 17, fontWeight: FontWeight.bold,color: Colors.black),child: Text(
-                                  '${['service']}',
+                                  '${LocationCubit.get(context).userService}',
                                 ),
                                 ),
                               ],
@@ -356,10 +360,12 @@ class ProviderMapScreen extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 20, 50, 20),
-                                    child: ElevatedButton(onPressed: (){
-                                      LocationCubit.get(context).isDataContainerShowen(uid: uId,mode: mode);
-                                      LocationCubit.get(context).isServiceButtonsShowen(uid: uId,mode: mode);
-
+                                    child: ElevatedButton(onPressed: ()async{
+                                      LocationCubit.get(context).IsServiceDone();
+                                      LocationCubit.get(context).UpdatingServiceDoneInFirestore(uid: uId);
+                                      LocationCubit.get(context).isDataContainerShowen();
+                                      LocationCubit.get(context).changingDataInFireStore(uid: uId);
+                                      LocationCubit.get(context).isServiceButtonsShowen();
                                       QuickAlert.show(
                                         title: 'Payment',
                                           barrierDismissible:false,
@@ -373,6 +379,8 @@ class ProviderMapScreen extends StatelessWidget {
                                           ],),
                                           onConfirmBtnTap: (){
                                             Navigator.pop(context);
+                                            LocationCubit.get(context).IsServiceDone();
+                                            LocationCubit.get(context).UpdatingServiceDoneInFirestore(uid: uId);
                                             QuickAlert.show(
                                               context: context,
                                               type: QuickAlertType.success,
@@ -398,7 +406,7 @@ class ProviderMapScreen extends StatelessWidget {
                                               ),
                                             );
                                           }
-                                      );;}, child: const Text('Service has been made ')),
+                                      );}, child: const Text('Service has been made ')),
                                   ),
                                   // SizedBox(width: MediaQuery.of(context).size.width/1.7,),
                                   ElevatedButton(onPressed:(){QuickAlert.show(title: 'Are you Sure',
@@ -409,9 +417,10 @@ class ProviderMapScreen extends StatelessWidget {
                                     cancelBtnText: 'No',cancelBtnTextStyle: const TextStyle(color: Colors.teal,fontWeight: FontWeight.bold,fontSize: 18),
                                     confirmBtnColor: Colors.teal,
                                     onConfirmBtnTap: () =>{
-                                    //Navigator.pop(context),
-                                    LocationCubit.get(context).isServiceButtonsShowen(mode: mode,uid: uId),
-                                      LocationCubit.get(context).isDataContainerShowen(mode: mode,uid: uId),
+                                    Navigator.pop(context),
+                                    LocationCubit.get(context).isServiceButtonsShowen(),
+                                      LocationCubit.get(context).isDataContainerShowen(),
+                                      LocationCubit.get(context).changingDataInFireStore(uid: uId),
                                     },);
                                   }, child: const Text('Cancel'),),
                                 ],
@@ -675,7 +684,8 @@ class ProviderMapScreen extends StatelessWidget {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.teal),
-                            onPressed: () {
+                            onPressed: () async {
+                              var snap =await FirebaseFirestore.instance.collection('user').doc('alaaa@mail.com').get();
                               QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.confirm,
@@ -694,7 +704,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                     fontWeight: FontWeight.bold),
                                               ),
                                               Text(
-                                                '${['name']}',
+                                                '${snap.data()!['name']}',
                                                 style: TextStyle(
                                                     fontSize: 17,
                                                     fontWeight: FontWeight.bold),
@@ -719,7 +729,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                     fontWeight: FontWeight.bold),
                                               ),
                                               Text(
-                                                '${['car type']}',
+                                                '${snap.data()!['car type']}',
                                                 style: TextStyle(
                                                     fontSize: 17,
                                                     fontWeight: FontWeight.bold),
@@ -776,7 +786,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            '${['service']}',
+                                            '${snap.data()!['service']}',
                                             style: TextStyle(
                                                 fontSize: 17, fontWeight: FontWeight.bold),
                                           ),
@@ -784,8 +794,10 @@ class ProviderMapScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  onConfirmBtnTap: () {
+                                  onConfirmBtnTap: () async{
+                                    LocationCubit.get(context).GettingUserData(uid: 'alaaa@mail.com');
                                     LocationCubit.get(context).isDataContainerShowen();
+                                    LocationCubit.get(context).changingDataInFireStore(uid: uId);
                                     LocationCubit.get(context).isServiceButtonsShowen();
                                     Navigator.pop(context);
                                   },

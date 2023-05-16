@@ -11,16 +11,28 @@ import 'package:quickalert/quickalert.dart';
 import '../models/directions_model.dart';
 import '../models/directions_repository.dart';
 import '../models/distance_matrix_model.dart';
+
 class LocationCubit extends Cubit<LocationStates> {
   LocationCubit() : super(LocationInitialState());
   static LocationCubit get(context) => BlocProvider.of(context);
   GoogleMapController? mapController1;
   bool ContainerShowen =false;
+  bool ContainerShownInUser =false;
+  bool serviceDone =false;
   bool ButtonsShowen =true;
+  bool ButtonsShowenInUser =true;
   bool passwordVisible = false;
   bool confirmPasswordVisible = false;
-
-
+  int requests =0;
+  String userName ='';
+  String userPhone ='';
+  String userCarType ='';
+  String userService ='';
+  String providerName ='';
+  String providerPhone ='';
+  String providerCarType ='';
+  String providerService ='';
+  String message ='';
   void isPasswordVisible() {
     passwordVisible = !passwordVisible;
     emit(PasswordVisibility());
@@ -32,23 +44,110 @@ class LocationCubit extends Cubit<LocationStates> {
     emit(ConfirmPasswordVisibility());
   }
 
-  isDataContainerShowen({uid, mode}){
-
+  isDataContainerShowen(){
     ContainerShowen= !ContainerShowen;
-    FirebaseFirestore.instance.collection(mode).doc(uid).set({
-'ContainerShowen':ContainerShowen
-    },SetOptions(merge: true));
     emit(DataContainerVisibility());
   }
 
+  isDataContainerShowenInUser(){
+    ContainerShownInUser= !ContainerShownInUser;
+    emit(DataContainerUserVisibility());
+  }
 
-
-  isServiceButtonsShowen({uid, mode}){
-    ButtonsShowen= !ButtonsShowen;
-    FirebaseFirestore.instance.collection(mode).doc(uid).set({
-      'ButtonsShowen':ContainerShowen
+  changingDataInFireStoreByUser({uid}){
+    FirebaseFirestore.instance.collection('provider').doc(uid).set({
+      'ContainerShowen':ContainerShownInUser
     },SetOptions(merge: true));
+    emit(ChangeDataInFireStoreByUser());
+  }
+
+  changingDataInFireStore({uid}){
+    FirebaseFirestore.instance.collection('provider').doc(uid).set({
+      'ContainerShowen':ContainerShowen
+    },SetOptions(merge: true));
+    emit(ChangeDataInFireStore());
+  }
+
+  updatingTheContainerBoolean({uid})async{
+    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ContainerShownInUser= snap.data()!['ContainerShowen'];
+    emit(GetDataFromFireStore());
+  }
+  updatingTheContainerBooleanByUser({uid})async{
+    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ContainerShowen= snap.data()!['ContainerShowen'];
+    emit(GetDataFromFireStoreByUser());
+  }
+
+  isServiceButtonsShowen(){
+    ButtonsShowen= !ButtonsShowen;
     emit(ServiceButtonsVisibility());
+  }
+
+  isServiceButtonsShowenInUser(){
+    ButtonsShowenInUser= !ButtonsShowenInUser;
+    emit(ServiceButtonsVisibilityInUser());
+  }
+
+  updatingTheButtonsBoolean({uid})async{
+    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ButtonsShowenInUser= !snap.data()!['ContainerShowen'];
+    emit(GetButtonsDataFromFireStore());
+  }
+  updatingTheButtonsBooleanByUser({uid})async{
+    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ButtonsShowen= !snap.data()!['ContainerShowen'];
+    emit(GetButtonsDataFromFireStoreByUser());
+  }
+  SearchingForRequests({uid})async{
+    await FirebaseFirestore.instance.collection('user').get().then((value) {
+      for (var doc in value.docs) {
+        if (doc.data()['message'] == 'need help') {
+          requests++;
+        }
+      }
+    }
+    );
+
+  }
+
+  GettingUserData({uid}) async {
+    var snap =await FirebaseFirestore.instance.collection('user').doc(uid).get();
+    userName =snap.data()!['name'];
+    userPhone =snap.data()!['phone'];
+    userCarType =snap.data()!['car type'];
+    userService =snap.data()!['service'];
+    emit(UserData());
+  }
+  GettingProviderData({uid}) async {
+    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    providerName =snap.data()!['name'];
+    providerPhone =snap.data()!['phone'];
+    providerCarType =snap.data()!['car type'];
+    providerService =snap.data()!['service'];
+    emit(ProviderData());
+  }
+  IsServiceDone(){
+    serviceDone=!serviceDone;
+    emit(IsServiceDonee());
+  }
+  UpdatingServiceDoneInFirestore({uid}){
+    FirebaseFirestore.instance.collection('provider').doc(uid).set({
+      'ServiceDone':serviceDone
+    },SetOptions(merge: true));
+    emit(UpdatingServiceDoneInFirestor());
+  }
+  GettingServiceDoneFromFirestore({uid}) async {
+    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    serviceDone= snap.data()!['ServiceDone'];
+    emit(GettingServiceDone());
+  }
+
+  ChangingServiceDoneInFirestore({uid}){
+    FirebaseFirestore.instance.collection('provider').doc(uid).set({
+      'ServiceDone':!serviceDone
+    },SetOptions(merge: true));
+    emit(ChangingServiceDoneInFirestor());
   }
   
   Future getPermission() async {

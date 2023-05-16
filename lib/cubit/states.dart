@@ -25,7 +25,19 @@ class AppearAlertSuccessToProvider extends LocationStates{}
 class DataContainerVisibility extends LocationStates{}
 class DataContainerUserVisibility extends LocationStates{}
 class ServiceButtonsVisibility extends LocationStates{}
+class ServiceButtonsVisibilityInUser extends LocationStates{}
 class PasswordVisibility extends LocationStates{}
 class ConfirmPasswordVisibility extends LocationStates{}
-
+class ChangeDataInFireStore extends LocationStates{}
+class ChangeDataInFireStoreByUser extends LocationStates{}
+class GetDataFromFireStore extends LocationStates{}
+class GetDataFromFireStoreByUser extends LocationStates{}
+class GetButtonsDataFromFireStore extends LocationStates{}
+class GetButtonsDataFromFireStoreByUser extends LocationStates{}
+class IsServiceDonee extends LocationStates{}
+class UpdatingServiceDoneInFirestor extends LocationStates{}
+class GettingServiceDone extends LocationStates{}
+class ChangingServiceDoneInFirestor extends LocationStates{}
+class UserData extends LocationStates{}
+class ProviderData extends LocationStates{}
 

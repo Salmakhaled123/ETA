@@ -34,7 +34,7 @@ dependencies:
   bloc: ^8.1.0
   flutter_bloc: ^8.1.1
   awesome_dialog: ^3.0.2
-  pinput: ^2.2.17
+  pinput: ^2.2.31
   shared_preferences: ^2.0.20
   quickalert: ^1.0.1
   dio: ^5.0.2
@@ -65,7 +65,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path:
+  image_path: "icons/Servei.png"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
