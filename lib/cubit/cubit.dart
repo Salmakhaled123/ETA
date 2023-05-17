@@ -16,140 +16,114 @@ class LocationCubit extends Cubit<LocationStates> {
   LocationCubit() : super(LocationInitialState());
   static LocationCubit get(context) => BlocProvider.of(context);
   GoogleMapController? mapController1;
-  bool ContainerShowen =false;
-  bool ContainerShownInUser =false;
-  bool serviceDone =false;
-  bool ButtonsShowen =true;
-  bool ButtonsShowenInUser =true;
+  //Alaa
+  bool ContainerShowen = false;
+  bool ContainerShownInUser = false;
+  bool ButtonsShowen = true;
+  bool ButtonsShowenInUser = true;
   bool passwordVisible = false;
   bool confirmPasswordVisible = false;
-  int requests =0;
-  String userName ='';
-  String userPhone ='';
-  String userCarType ='';
-  String userService ='';
-  String providerName ='';
-  String providerPhone ='';
-  String providerCarType ='';
-  String providerService ='';
-  String message ='';
+  String userName = '';
+  String userPhone = '';
+  String userCarType = '';
+  String userService = '';
+  String providerName = '';
+  String providerPhone = '';
+  String providerCarType = '';
+  String providerService = '';
+  //Alaa
   void isPasswordVisible() {
     passwordVisible = !passwordVisible;
     emit(PasswordVisibility());
   }
-
 
   void isConfirmPasswordVisible() {
     confirmPasswordVisible = !confirmPasswordVisible;
     emit(ConfirmPasswordVisibility());
   }
 
-  isDataContainerShowen(){
-    ContainerShowen= !ContainerShowen;
+  isDataContainerShowen() {
+    ContainerShowen = !ContainerShowen;
     emit(DataContainerVisibility());
   }
 
-  isDataContainerShowenInUser(){
-    ContainerShownInUser= !ContainerShownInUser;
+  isDataContainerShowenInUser() {
+    ContainerShownInUser = !ContainerShownInUser;
     emit(DataContainerUserVisibility());
   }
 
-  changingDataInFireStoreByUser({uid}){
-    FirebaseFirestore.instance.collection('provider').doc(uid).set({
-      'ContainerShowen':ContainerShownInUser
-    },SetOptions(merge: true));
+  changingDataInFireStoreByUser({uid}) {
+    FirebaseFirestore.instance.collection('provider').doc(uid).set(
+        {'ContainerShowen': ContainerShownInUser}, SetOptions(merge: true));
     emit(ChangeDataInFireStoreByUser());
   }
 
-  changingDataInFireStore({uid}){
-    FirebaseFirestore.instance.collection('provider').doc(uid).set({
-      'ContainerShowen':ContainerShowen
-    },SetOptions(merge: true));
+  changingDataInFireStore({uid}) {
+    FirebaseFirestore.instance
+        .collection('provider')
+        .doc(uid)
+        .set({'ContainerShowen': ContainerShowen}, SetOptions(merge: true));
     emit(ChangeDataInFireStore());
   }
 
-  updatingTheContainerBoolean({uid})async{
-    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
-    ContainerShownInUser= snap.data()!['ContainerShowen'];
+  updatingTheContainerBoolean({uid}) async {
+    var snap =
+        await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ContainerShownInUser = snap.data()!['ContainerShowen'];
     emit(GetDataFromFireStore());
   }
-  updatingTheContainerBooleanByUser({uid})async{
-    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
-    ContainerShowen= snap.data()!['ContainerShowen'];
+
+  updatingTheContainerBooleanByUser({uid}) async {
+    var snap =
+        await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ContainerShowen = snap.data()!['ContainerShowen'];
     emit(GetDataFromFireStoreByUser());
   }
 
-  isServiceButtonsShowen(){
-    ButtonsShowen= !ButtonsShowen;
+  isServiceButtonsShowen() {
+    ButtonsShowen = !ButtonsShowen;
     emit(ServiceButtonsVisibility());
   }
 
-  isServiceButtonsShowenInUser(){
-    ButtonsShowenInUser= !ButtonsShowenInUser;
+  isServiceButtonsShowenInUser() {
+    ButtonsShowenInUser = !ButtonsShowenInUser;
     emit(ServiceButtonsVisibilityInUser());
   }
 
-  updatingTheButtonsBoolean({uid})async{
-    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
-    ButtonsShowenInUser= !snap.data()!['ContainerShowen'];
+  updatingTheButtonsBoolean({uid}) async {
+    var snap =
+        await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ButtonsShowenInUser = !snap.data()!['ContainerShowen'];
     emit(GetButtonsDataFromFireStore());
   }
-  updatingTheButtonsBooleanByUser({uid})async{
-    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
-    ButtonsShowen= !snap.data()!['ContainerShowen'];
-    emit(GetButtonsDataFromFireStoreByUser());
-  }
-  SearchingForRequests({uid})async{
-    await FirebaseFirestore.instance.collection('user').get().then((value) {
-      for (var doc in value.docs) {
-        if (doc.data()['message'] == 'need help') {
-          requests++;
-        }
-      }
-    }
-    );
 
+  updatingTheButtonsBooleanByUser({uid}) async {
+    var snap =
+        await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    ButtonsShowen = !snap.data()!['ContainerShowen'];
+    emit(GetButtonsDataFromFireStoreByUser());
   }
 
   GettingUserData({uid}) async {
-    var snap =await FirebaseFirestore.instance.collection('user').doc(uid).get();
-    userName =snap.data()!['name'];
-    userPhone =snap.data()!['phone'];
-    userCarType =snap.data()!['car type'];
-    userService =snap.data()!['service'];
+    var snap =
+        await FirebaseFirestore.instance.collection('user').doc(uid).get();
+    userName = snap.data()!['name'];
+    userPhone = snap.data()!['phone'];
+    userCarType = snap.data()!['car type'];
+    userService = snap.data()!['service'];
     emit(UserData());
   }
+
   GettingProviderData({uid}) async {
-    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
-    providerName =snap.data()!['name'];
-    providerPhone =snap.data()!['phone'];
-    providerCarType =snap.data()!['car type'];
-    providerService =snap.data()!['service'];
+    var snap =
+        await FirebaseFirestore.instance.collection('provider').doc(uid).get();
+    providerName = snap.data()!['name'];
+    providerPhone = snap.data()!['phone'];
+    providerCarType = snap.data()!['car type'];
+    providerService = snap.data()!['service'];
     emit(ProviderData());
   }
-  IsServiceDone(){
-    serviceDone=!serviceDone;
-    emit(IsServiceDonee());
-  }
-  UpdatingServiceDoneInFirestore({uid}){
-    FirebaseFirestore.instance.collection('provider').doc(uid).set({
-      'ServiceDone':serviceDone
-    },SetOptions(merge: true));
-    emit(UpdatingServiceDoneInFirestor());
-  }
-  GettingServiceDoneFromFirestore({uid}) async {
-    var snap =await FirebaseFirestore.instance.collection('provider').doc(uid).get();
-    serviceDone= snap.data()!['ServiceDone'];
-    emit(GettingServiceDone());
-  }
-
-  ChangingServiceDoneInFirestore({uid}){
-    FirebaseFirestore.instance.collection('provider').doc(uid).set({
-      'ServiceDone':!serviceDone
-    },SetOptions(merge: true));
-    emit(ChangingServiceDoneInFirestor());
-  }
-  
+//Alaa
   Future getPermission() async {
     bool isServiceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -169,24 +143,24 @@ class LocationCubit extends Cubit<LocationStates> {
   var currentLocationProvider;
   var latProvider;
   var langProvider;
-  String ?uidProvider=CacheHelper.getData(key:'uIdProvider' );
-LatLng ?lngUser,lngProvider;
+  String? uidProvider = CacheHelper.getData(key: 'uIdProvider');
+  LatLng? lngUser, lngProvider;
 
   List<LatLng> origins = [];
   List<LatLng> destinations = [];
   Map<LatLng, String> complexElements = {};
   List<DistanceMatrixElement> elements = [];
-  List<String>providersUid=[];
+  List<String> providersUid = [];
   List<String> destinationStrings = [];
   List<String> originStrings = [];
   List<DistanceMatrixElement> sortedElements = [];
 
   Future<List<DistanceMatrixElement>> getDistanceMatrix(context) async {
-    sortedElements=[];
-    originStrings=[];
-    destinationStrings=[];
-    origins=[];
-    destinations=[];
+    sortedElements = [];
+    originStrings = [];
+    destinationStrings = [];
+    origins = [];
+    destinations = [];
     await FirebaseFirestore.instance.collection('user').get().then((value) {
       for (var doc in value.docs) {
         origins.add(LatLng(
@@ -215,7 +189,7 @@ LatLng ?lngUser,lngProvider;
     print(destinationStrings);
     print(originStrings);
     try {
-      Dio dio =Dio();
+      Dio dio = Dio();
       const String baseUrl2 =
           'https://maps.googleapis.com/maps/api/distancematrix/json?';
       final response = await dio.get(baseUrl2,
@@ -240,8 +214,7 @@ LatLng ?lngUser,lngProvider;
               'Duration: ${element.duration.text}, Distance: ${element.distance.text}');
         }
 
-        for (var i = 0; i < destinations.length; i++)
-        {
+        for (var i = 0; i < destinations.length; i++) {
           // Use the LatLng value as the key and the corresponding
           // DistanceMatrixElement as the value in the Map
           complexElements[destinations[i]] = elements[i].duration.text;
@@ -257,14 +230,15 @@ LatLng ?lngUser,lngProvider;
         // print(originElements);
 
         sortedElements = List<DistanceMatrixElement>.from(json['rows'][0]
-        ['elements']
+                ['elements']
             .map((element) => DistanceMatrixElement.fromJson(element)))
           ..sort((a, b) => int.parse(
-              a.duration.text.replaceAll(RegExp(r'[^0-9]'), ''))
+                  a.duration.text.replaceAll(RegExp(r'[^0-9]'), ''))
               .compareTo(int.parse(b.duration.text.replaceAll(RegExp(r'[^0-9]'),
-              '')))); // The sorted list of DistanceMatrixElement objects
+                  '')))); // The sorted list of DistanceMatrixElement objects
 // Printing the sorted list to the console
-        await CacheHelper.saveStringData(key: 'sortedElements', value: sortedElements[0].duration.text);
+        await CacheHelper.saveStringData(
+            key: 'sortedElements', value: sortedElements[0].duration.text);
         print('====================new ==================');
         for (var i = 0; i < destinations.length; i++) {
           if (sortedElements[0].duration.text ==
@@ -273,14 +247,11 @@ LatLng ?lngUser,lngProvider;
             FirebaseFirestore.instance
                 .collection('provider')
                 .get()
-                .then((value)
-            {
-
+                .then((value) {
               for (var doc in value.docs) {
                 if (LatLng(doc.data()['current location'].latitude,
-                    doc.data()['current location'].longitude) ==
-                    destinations[i])
-                {
+                        doc.data()['current location'].longitude) ==
+                    destinations[i]) {
                   return QuickAlert.show(
                       context: context,
                       type: QuickAlertType.info,
@@ -288,18 +259,15 @@ LatLng ?lngUser,lngProvider;
                       text: 'car model ${doc.data()['car model']} ,'
                           'eta ${complexElements[destinations[i]]}');
                   providersUid.add(doc.data()['email']);
-                  for(int i=0; i<providersUid.length;i++) {
+                  for (int i = 0; i < providersUid.length; i++) {
                     print(providersUid[i]);
 
-                    if ( uidProvider == doc.data()['email'])
-                    {
+                    if (uidProvider == doc.data()['email']) {
                       print("yes");
-
-                    }
-                    else{
+                    } else {
                       print("NOOOO");
                       print(uidProvider);
-                      for(int i=0;i<providersUid.length;i++) {
+                      for (int i = 0; i < providersUid.length; i++) {
                         print(providersUid[i]);
                       }
                     }
@@ -310,8 +278,6 @@ LatLng ?lngUser,lngProvider;
                   //   title: 'Loading',
                   //   text: 'Searching for nearby providers',
                   // );
-
-
                 }
               }
             });
@@ -338,18 +304,16 @@ LatLng ?lngUser,lngProvider;
       throw e.toString();
     }
   }
-  getLatAndLong({required uId,required mode})
-  {
-    if (mode == 'user')
-    {
+
+  getLatAndLong({required uId, required mode}) {
+    if (mode == 'user') {
       getUserLocation(uId, mode);
     } else {
       getProviderLocation(uId, mode);
     }
   }
 
-  getUserLocation(uId,mode)
-  {
+  getUserLocation(uId, mode) {
     {
       currentLocationUser = Geolocator.getCurrentPosition().then((value) {
         latUser = value.latitude;
@@ -373,10 +337,11 @@ LatLng ?lngUser,lngProvider;
         print(error.toString());
         emit(GetCurrentLocationError(error.toString()));
       });
-    };
+    }
+    ;
   }
-  getProviderLocation(uId,mode)
-  {
+
+  getProviderLocation(uId, mode) {
     {
       currentLocationProvider = Geolocator.getCurrentPosition().then((value) {
         latProvider = value.latitude;
@@ -402,7 +367,8 @@ LatLng ?lngUser,lngProvider;
         print(error.toString());
         emit(GetCurrentLocationError(error.toString()));
       });
-    };
+    }
+    ;
   }
 
   List<String> screensByDrawer = [
@@ -415,8 +381,6 @@ LatLng ?lngUser,lngProvider;
     Icons.miscellaneous_services,
     Icons.language,
   ];
-
-
 
   bool isDark = false;
   String style = '';
@@ -466,19 +430,17 @@ LatLng ?lngUser,lngProvider;
 //       }
 //     }
 //   }
-  changeMood(context) async
-  {
+  changeMood(context) async {
     isDark = !isDark;
     emit(MoodChangesSuccessfully());
     if (isDark) {
-      style = await DefaultAssetBundle.of(context).loadString(
-          'assets/map_style_dark.json');
+      style = await DefaultAssetBundle.of(context)
+          .loadString('assets/map_style_dark.json');
       await mapController1?.setMapStyle(style);
       emit(DarkMapMood());
-    }
-    else {
-      style = await DefaultAssetBundle.of(context).loadString(
-          'assets/map_style_light.json');
+    } else {
+      style = await DefaultAssetBundle.of(context)
+          .loadString('assets/map_style_light.json');
       await mapController1?.setMapStyle(style);
       emit(LightMapMood());
     }
@@ -561,16 +523,12 @@ LatLng ?lngUser,lngProvider;
     lang = val;
     if (val == 'Arabic') {
       emit(ArabicState());
-    }
-    else if (val == 'English') {
+    } else if (val == 'English') {
       emit(EnglishState());
     }
   }
 
-
-
-  List<ServiceItem> services =
-  [
+  List<ServiceItem> services = [
     ServiceItem(
         name: 'Tow Truck', image: 'assets/new-tow.png', isClicked: false),
     ServiceItem(name: 'winch', image: 'assets/new-win.png', isClicked: false),
@@ -589,7 +547,7 @@ LatLng ?lngUser,lngProvider;
     ServiceItem(name: 'Tire Change', image: 'assets/tire.png', isClicked: false)
   ];
   List<ServiceItem> emergencyItems = [
- ServiceItem(
+    ServiceItem(
         name: 'Fire Stations',
         image: 'assets/fire-truck.png',
         isClicked: false),
@@ -601,112 +559,115 @@ LatLng ?lngUser,lngProvider;
         isClicked: false)
   ];
 
-
-
-int ?selectedIndex1;
-int ?selectedIndex2;
-void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emergencyIndex,
-})
-{
+  int? selectedIndex1;
+  int? selectedIndex2;
+  void isServiceClicked({
+    ServiceItem? model,
+    uId,
+    serviceName,
+    serviceIndex,
+    emergencyIndex,
+  }) {
     model!.isClicked = !model.isClicked;
-    if (model.isClicked == true )
-    {
-          FirebaseFirestore.instance.collection('provider').doc(uId).set({
-            'services': serviceName
-          }, SetOptions(merge: true));
-          // for (var i = 0; i < origins.length; i++) {
-          //   if (sortedElements[0].duration.text ==
-          //       originElements[origins[i]]) {
-          //     print('${origins[i]} =>${originElements[origins[i]]}');
-          //     FirebaseFirestore.instance
-          //         .collection('user')
-          //         .get()
-          //         .then((value) {
-          //       for (var doc in value.docs) {
-          //         if (LatLng(doc.data()['current location'].latitude,
-          //             doc.data()['current location'].longitude) ==
-          //             origins[i]) {
-          //           print('Name ${doc.data()['name']}' 'Phone ${doc.data()['phone']}' 'ETA ${originElements[origins[i]]}',);
-          //           return Container(
-          //             decoration: BoxDecoration(
-          //               color: Colors.indigo,
-          //               border: Border.all(color: Colors.indigo,width: 4),
-          //               borderRadius: BorderRadius.circular(20),
-          //             ),
-          //             child: Column(
-          //               children: [
-          //                 Text('Name ${doc.data()['name']}',),
-          //                 const SizedBox(height: 5,),
-          //                 Text('Phone ${doc.data()['phone']}',),
-          //                 const SizedBox(height: 5,),
-          //                 Text('Car model ${doc.data()['car model']}',),
-          //                 const SizedBox(height: 5,),
-          //                 Text('ETA ${originElements[origins[i]]}',),
-          //                 const SizedBox(height: 5,),
-          //                 // Row(
-          //                 //   children: [
-          //                 //     ElevatedButton(onPressed: (){
-          //                 //
-          //                 //     }, child: const Text("Accept"))
-          //                 //   ],
-          //                 // )
-          //               ],
-          //
-          //             ),
-          //
-          //
-          //
-          //           );
-          //
-          //           // return QuickAlert.show(
-          //           //     context: ,
-          //           //     type: QuickAlertType.info,
-          //           //     title: 'Name ${doc.data()['name']}',
-          //           //     text: 'Car model ${doc.data()['car model']} ,'
-          //           //         'eta ${complexElements[destinations[i]]}');
-          //         }
-          //       }
-          //     });
-          //     break;
-          //   }
-          // }
+    if (model.isClicked == true) {
+      FirebaseFirestore.instance
+          .collection('provider')
+          .doc(uId)
+          .set({'services': serviceName}, SetOptions(merge: true));
+      // for (var i = 0; i < origins.length; i++) {
+      //   if (sortedElements[0].duration.text ==
+      //       originElements[origins[i]]) {
+      //     print('${origins[i]} =>${originElements[origins[i]]}');
+      //     FirebaseFirestore.instance
+      //         .collection('user')
+      //         .get()
+      //         .then((value) {
+      //       for (var doc in value.docs) {
+      //         if (LatLng(doc.data()['current location'].latitude,
+      //             doc.data()['current location'].longitude) ==
+      //             origins[i]) {
+      //           print('Name ${doc.data()['name']}' 'Phone ${doc.data()['phone']}' 'ETA ${originElements[origins[i]]}',);
+      //           return Container(
+      //             decoration: BoxDecoration(
+      //               color: Colors.indigo,
+      //               border: Border.all(color: Colors.indigo,width: 4),
+      //               borderRadius: BorderRadius.circular(20),
+      //             ),
+      //             child: Column(
+      //               children: [
+      //                 Text('Name ${doc.data()['name']}',),
+      //                 const SizedBox(height: 5,),
+      //                 Text('Phone ${doc.data()['phone']}',),
+      //                 const SizedBox(height: 5,),
+      //                 Text('Car model ${doc.data()['car model']}',),
+      //                 const SizedBox(height: 5,),
+      //                 Text('ETA ${originElements[origins[i]]}',),
+      //                 const SizedBox(height: 5,),
+      //                 // Row(
+      //                 //   children: [
+      //                 //     ElevatedButton(onPressed: (){
+      //                 //
+      //                 //     }, child: const Text("Accept"))
+      //                 //   ],
+      //                 // )
+      //               ],
+      //
+      //             ),
+      //
+      //
+      //
+      //           );
+      //
+      //           // return QuickAlert.show(
+      //           //     context: ,
+      //           //     type: QuickAlertType.info,
+      //           //     title: 'Name ${doc.data()['name']}',
+      //           //     text: 'Car model ${doc.data()['car model']} ,'
+      //           //         'eta ${complexElements[destinations[i]]}');
+      //         }
+      //       }
+      //     });
+      //     break;
+      //   }
+      // }
     }
-    selectedIndex1=serviceIndex;
-    selectedIndex2=emergencyIndex;
+    selectedIndex1 = serviceIndex;
+    selectedIndex2 = emergencyIndex;
     emit(ServiceClickedSuccessfully());
-
   }
+
   Directions? info;
-  connection(context)async
-  {
-    if(lngUser==null)
-    {
+  connection(context) async {
+    if (lngUser == null) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
         text: 'determine your location please',
-
       );
     }
-    await FirebaseFirestore.instance.collection('provider').get().then((value)
-    {
-      for (var doc in value.docs)
-      {
-        lngProvider=LatLng(doc.data()['current location'].latitude, doc.data()['current location'].longitude);
-        Marker marker = Marker(icon:  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+    await FirebaseFirestore.instance.collection('provider').get().then((value) {
+      for (var doc in value.docs) {
+        lngProvider = LatLng(doc.data()['current location'].latitude,
+            doc.data()['current location'].longitude);
+        Marker marker = Marker(
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             markerId: MarkerId('provider'),
-            position: LatLng(doc.data()['current location'].latitude,doc.data()['current location'].longitude),
+            position: LatLng(doc.data()['current location'].latitude,
+                doc.data()['current location'].longitude),
             infoWindow: InfoWindow(title: 'provider'));
         markers.add(marker);
         break;
-      } });
-    if(lngProvider==null)
-      {
-        QuickAlert.show(context: context, type: QuickAlertType.error,
-        title: 'No provider available now');
       }
+    });
+    if (lngProvider == null) {
+      QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'No provider available now');
+    }
 
-    final directions =await DirectionsRepository()
+    final directions = await DirectionsRepository()
         .getDirections(origin: lngUser!, destination: lngProvider!);
     info = directions;
     Navigator.pop(context);
@@ -714,26 +675,24 @@ void isServiceClicked({ServiceItem  ?model, uId, serviceName,serviceIndex,emerge
 
     emit(DirectionsSuccess());
   }
-  void removeService(model, uId, serviceName) {
 
-    FirebaseFirestore.instance.collection('provider').doc(uId).set(
-        {
-          'services': FieldValue.arrayRemove([serviceName])
-        }, SetOptions(merge: true));
+  void removeService(model, uId, serviceName) {
+    FirebaseFirestore.instance.collection('provider').doc(uId).set({
+      'services': FieldValue.arrayRemove([serviceName])
+    }, SetOptions(merge: true));
 
     emit(RemovedSuccessfully());
   }
-
-
 }
+
 class ServiceItem {
   String image;
   String name;
   bool isClicked;
 
-
-  ServiceItem(
-      {required this.name, required this.image, required this.isClicked,
-
-      });
+  ServiceItem({
+    required this.name,
+    required this.image,
+    required this.isClicked,
+  });
 }

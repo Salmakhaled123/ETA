@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import '../cache/shared_pref.dart';
 import '../components/constants.dart';
 import '../utiles/showToast.dart';
-import 'login_choose.dart';
 import 'mapScreen.dart';
 
 class HomeScreen extends StatefulWidget {

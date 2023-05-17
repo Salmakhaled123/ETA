@@ -29,10 +29,10 @@ class MapScreen extends StatelessWidget {
         visabilty = snap.data()!['ContainerShowen'];
       },
       builder: (context, state) {
-        LocationCubit.get(context).updatingTheContainerBoolean(uid: "alaa@mail.com");
-        LocationCubit.get(context).updatingTheButtonsBoolean(uid: "alaa@mail.com");
-        LocationCubit.get(context).GettingServiceDoneFromFirestore(uid: "alaa@mail.com");
-        LocationCubit.get(context).GettingProviderData(uid: "alaa@mail.com");
+        // LocationCubit.get(context).updatingTheContainerBoolean(uid: "alaa@mail.com");
+        // LocationCubit.get(context).updatingTheButtonsBoolean(uid: "alaa@mail.com");
+        // LocationCubit.get(context).GettingServiceDoneFromFirestore(uid: "alaa@mail.com");
+        // LocationCubit.get(context).GettingProviderData(uid: "alaa@mail.com");
         var cubit = LocationCubit.get(context);
         print('uId $uId');
         print('mode $mode');

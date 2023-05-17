@@ -153,8 +153,8 @@ class ProviderMapScreen extends StatelessWidget {
         // }
       },
       builder: (context, state) {
-        LocationCubit.get(context).updatingTheContainerBooleanByUser(uid: uId);
-        LocationCubit.get(context).updatingTheButtonsBooleanByUser(uid:uId);
+        // LocationCubit.get(context).updatingTheContainerBooleanByUser(uid: uId);
+        // LocationCubit.get(context).updatingTheButtonsBooleanByUser(uid:uId);
         var cubit = LocationCubit.get(context);
 
         print('uId $uId');
@@ -331,7 +331,7 @@ class ProviderMapScreen extends StatelessWidget {
                                 ),
                                 DefaultTextStyle(style: TextStyle(
                                     fontSize: 17, fontWeight: FontWeight.bold,color: Colors.black),child:Text(
-                                  '12 KM',
+                                  '5.7 KM',
                                 ),
                                 ),
                               ],
@@ -349,7 +349,7 @@ class ProviderMapScreen extends StatelessWidget {
                                 ),
                                 DefaultTextStyle(style: const TextStyle(
                                     fontSize: 17, fontWeight: FontWeight.bold,color: Colors.black),child: Text(
-                                  '${LocationCubit.get(context).userService}',
+                                  'Winch',
                                 ),
                                 ),
                               ],
@@ -361,8 +361,6 @@ class ProviderMapScreen extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 20, 50, 20),
                                     child: ElevatedButton(onPressed: ()async{
-                                      LocationCubit.get(context).IsServiceDone();
-                                      LocationCubit.get(context).UpdatingServiceDoneInFirestore(uid: uId);
                                       LocationCubit.get(context).isDataContainerShowen();
                                       LocationCubit.get(context).changingDataInFireStore(uid: uId);
                                       LocationCubit.get(context).isServiceButtonsShowen();
@@ -379,8 +377,6 @@ class ProviderMapScreen extends StatelessWidget {
                                           ],),
                                           onConfirmBtnTap: (){
                                             Navigator.pop(context);
-                                            LocationCubit.get(context).IsServiceDone();
-                                            LocationCubit.get(context).UpdatingServiceDoneInFirestore(uid: uId);
                                             QuickAlert.show(
                                               context: context,
                                               type: QuickAlertType.success,
@@ -768,7 +764,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            '12 KM',
+                                            '5.7 KM',
                                             style: TextStyle(
                                                 fontSize: 17, fontWeight: FontWeight.bold),
                                           ),
@@ -786,7 +782,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            '${snap.data()!['service']}',
+                                            'Winch',
                                             style: TextStyle(
                                                 fontSize: 17, fontWeight: FontWeight.bold),
                                           ),

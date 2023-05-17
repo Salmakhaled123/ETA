@@ -62,7 +62,7 @@ class MyVerify extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      '+20${PhoneScreen.phone}',
+                      '+2${PhoneScreen.phone}',
                       style: const TextStyle(color: Colors.teal, fontSize: 16),
                     ),
                     const SizedBox(

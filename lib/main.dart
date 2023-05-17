@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget
                 colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal,brightness:Brightness.dark)),
             themeMode: LocationCubit.get(context).isDark? ThemeMode.dark:ThemeMode.light,
             debugShowCheckedModeBanner: false,
-            home: const SplashScreen(),
+            home: const splashScreen(),
           );
         },
         listener: (context, state) {},
