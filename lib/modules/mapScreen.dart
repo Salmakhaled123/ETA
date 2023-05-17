@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -21,18 +20,13 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final number = '+201141082464';
     return BlocConsumer<LocationCubit, LocationStates>(
-      listener: (context, state) async {
-        var snap = await FirebaseFirestore.instance
-            .collection('provider')
-            .doc('alaa@mail.com')
-            .get();
-        visabilty = snap.data()!['ContainerShowen'];
+      listener: (context, state) {
       },
       builder: (context, state) {
-        // LocationCubit.get(context).updatingTheContainerBoolean(uid: "alaa@mail.com");
-        // LocationCubit.get(context).updatingTheButtonsBoolean(uid: "alaa@mail.com");
-        // LocationCubit.get(context).GettingServiceDoneFromFirestore(uid: "alaa@mail.com");
-        // LocationCubit.get(context).GettingProviderData(uid: "alaa@mail.com");
+        LocationCubit.get(context).updatingTheContainerBoolean(uid: "aa.alaaaemad@gmail.com");
+        LocationCubit.get(context).updatingTheButtonsBoolean(uid: "aa.alaaaemad@gmail.com");
+        LocationCubit.get(context).GettingProviderData(uid: "aa.alaaaemad@gmail.com");
+
         var cubit = LocationCubit.get(context);
         print('uId $uId');
         print('mode $mode');
@@ -189,59 +183,7 @@ class MapScreen extends StatelessWidget {
                           Icon(Icons.location_searching, color: Colors.white),
                     )),
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     if(LocationCubit.get(context).serviceDone==true){
-              //       QuickAlert.show(
-              //           title: 'Payment',
-              //           barrierDismissible:false,
-              //           confirmBtnColor:Colors.green,
-              //           confirmBtnText: 'Collected',
-              //           context: context,
-              //           type: QuickAlertType.success,
-              //           widget: Column(children: const [Center(child: Text('Cash to be collected in Egyptian pounds is')),
-              //             SizedBox(height: 5,),
-              //             Text('120',style: TextStyle(fontSize: 25,color: Colors.green,fontWeight: FontWeight.bold),)
-              //           ],),
-              //           onConfirmBtnTap: (){
-              //             Navigator.pop(context);
-              //             QuickAlert.show(
-              //               context: context,
-              //               type: QuickAlertType.success,
-              //               barrierDismissible:false,
-              //               confirmBtnColor: Colors.green,
-              //               confirmBtnText: 'Rate',
-              //               onConfirmBtnTap: (){
-              //                 Navigator.of(context).pop();
-              //                 LocationCubit.get(context).IsServiceDone();
-              //                 LocationCubit.get(context).UpdatingServiceDoneInFirestore(uid: "alaa@mail.com");
-              //               },
-              //               text: 'Please rate the client',
-              //               widget: RatingBar.builder(
-              //                 initialRating: 3,
-              //                 minRating: 1,
-              //                 direction: Axis.horizontal,
-              //                 allowHalfRating: false,
-              //                 itemCount: 5,
-              //                 unratedColor: Colors.green.shade100,
-              //                 itemPadding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
-              //                 itemBuilder: (context, _) => const Icon(
-              //                   Icons.star,
-              //                   color: Colors.green,
-              //                 ),
-              //                 onRatingUpdate: (rating) {
-              //                   print(rating);
-              //                 },
-              //               ),
-              //             );
-              //           }
-              //       );
-              //     }
-              //
-              //
-              //   },
-              //   child: Text('try'),
-              // ),
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 450, 5, 10),
                 child: Visibility(
@@ -427,7 +369,7 @@ class MapScreen extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
                                   child: Text(
-                                    '${LocationCubit.get(context).providerService}',
+                                    'JumpStart',
                                   ),
                                 ),
                               ],
@@ -531,8 +473,8 @@ class MapScreen extends StatelessWidget {
                                           // LocationCubit.get(context)
                                           //     .isServiceButtonsShowen(),
                                           LocationCubit.get(context).isDataContainerShowenInUser(),
-                                        LocationCubit.get(context).changingDataInFireStoreByUser(uid: 'alaa@mail.com'),
-                                          LocationCubit.get(context).updatingTheContainerBoolean(uid:'alaa@mail.com' ),
+                                        LocationCubit.get(context).changingDataInFireStoreByUser(uid: 'aa.alaaaemad@gmail.com'),
+                                          LocationCubit.get(context).updatingTheContainerBoolean(uid:'aa.alaaaemad@gmail.com' ),
                                         },
                                       );
                                     },
@@ -576,12 +518,6 @@ class MapScreen extends StatelessWidget {
                               ],
                             ),
                             onPressed: () async {
-                              var snap = await FirebaseFirestore.instance
-                                  .collection('provider')
-                                  .doc('alaa@mail.com')
-                                  .get();
-                              visabilty = snap.data()!['ContainerShowen'];
-                              print(visabilty);
                               showModalBottomSheet<void>(
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
@@ -846,6 +782,8 @@ class MapScreen extends StatelessWidget {
                                                                         ElevatedButton(
                                                                       onPressed:
                                                                           () async {
+                                                                        Navigator.pop(context);
+                                                                        Navigator.pop(context);
                                                                         QuickAlert.show(context: context, type: QuickAlertType.loading,title: 'Searching',text: 'For nearby providers',showCancelBtn: true,);
                                                                         print(
                                                                             'uidProvider is ${FirebaseAuth.instance.currentUser?.email} ');
@@ -1500,7 +1438,11 @@ class MapScreen extends StatelessWidget {
                                                                     child:
                                                                         ElevatedButton(
                                                                       onPressed:
-                                                                          () {},
+                                                                          () async{
+                                                                            Navigator.pop(context);
+                                                                            Navigator.pop(context);
+                                                                            QuickAlert.show(context: context, type: QuickAlertType.loading,title: 'Searching',text: 'For nearby providers',);
+                                                                          },
                                                                       style: ElevatedButton.styleFrom(
                                                                           shape: RoundedRectangleBorder(
                                                                               borderRadius: BorderRadius.circular(

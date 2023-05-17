@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:etaproject/utiles/showToast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -24,137 +27,10 @@ class ProviderMapScreen extends StatelessWidget {
     final number = '+201141082464';
     return BlocConsumer<LocationCubit, LocationStates>(
       listener: (context, state) {
-        // if (state is GetCurrentLocationSuccess) {
-        //   Firebasetore.instance.collection('user').get().then((value) {
-        //     for (var doc in value.docs) {
-        //       if (doc.data()['message'] == 'need help') {
-        //         QuickAlert.show(
-        //             context: context,
-        //             type: QuickAlertType.confirm,
-        //             widget: Column(
-        //               children: <Widget>[
-        //                 SingleChildScrollView(
-        //                   scrollDirection: Axis.horizontal,
-        //                   child: Padding(
-        //                     padding: const EdgeInsets.only(right: 500),
-        //                     child: Row(
-        //                       children: <Widget>[
-        //                         const Text(
-        //                           'User name: ',
-        //                           style: TextStyle(
-        //                               color: Colors.teal,
-        //                               fontWeight: FontWeight.bold),
-        //                         ),
-        //                         Text(
-        //                           '${doc.data()['name']}',
-        //                           style: const TextStyle(
-        //                               fontSize: 17,
-        //                               fontWeight: FontWeight.bold),
-        //                         ),
-        //                       ],
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 const SizedBox(
-        //                   height: 5,
-        //                 ),
-        //                 SingleChildScrollView(
-        //                   scrollDirection: Axis.horizontal,
-        //                   child: Padding(
-        //                     padding: const EdgeInsets.only(right: 500),
-        //                     child: Row(
-        //                       children: <Widget>[
-        //                         Text(
-        //                           'Car type: ',
-        //                           style: TextStyle(
-        //                               color: Colors.teal,
-        //                               fontWeight: FontWeight.bold),
-        //                         ),
-        //                         Text(
-        //                           '${doc.data()['car type']}',
-        //                           style: const TextStyle(
-        //                               fontSize: 17,
-        //                               fontWeight: FontWeight.bold),
-        //                         ),
-        //                       ],
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 const SizedBox(
-        //                   height: 5,
-        //                 ),
-        //                 Row(
-        //                   children: const <Widget>[
-        //                     Text(
-        //                       'Estimated time arrival: ',
-        //                       style: TextStyle(
-        //                           color: Colors.teal,
-        //                           fontWeight: FontWeight.bold),
-        //                     ),
-        //                     Text(
-        //                       '10 MIN',
-        //                       style: TextStyle(
-        //                           fontSize: 17, fontWeight: FontWeight.bold),
-        //                     ),
-        //                   ],
-        //                 ),
-        //                 SizedBox(
-        //                   height: 5,
-        //                 ),
-        //                 Row(
-        //                   children: const <Widget>[
-        //                     Text(
-        //                       'Distance : ',
-        //                       style: TextStyle(
-        //                           color: Colors.teal,
-        //                           fontWeight: FontWeight.bold),
-        //                     ),
-        //                     Text(
-        //                       '12 KM',
-        //                       style: TextStyle(
-        //                           fontSize: 17, fontWeight: FontWeight.bold),
-        //                     ),
-        //                   ],
-        //                 ),
-        //                 const SizedBox(
-        //                   height: 5,
-        //                 ),
-        //                 Row(
-        //                   children: <Widget>[
-        //                     const Text(
-        //                       'Required Service: ',
-        //                       style: TextStyle(
-        //                           color: Colors.teal,
-        //                           fontWeight: FontWeight.bold),
-        //                     ),
-        //                     Text(
-        //                       '${doc.data()['service']}',
-        //                       style: const TextStyle(
-        //                           fontSize: 17, fontWeight: FontWeight.bold),
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ],
-        //             ),
-        //             onConfirmBtnTap: () {
-        //               LocationCubit.get(context).isDataContainerShowen();
-        //               LocationCubit.get(context).isServiceButtonsShowen();
-        //               Navigator.pop(context);
-        //             },
-        //             textColor: Colors.teal,
-        //             confirmBtnText: 'Accept',
-        //             cancelBtnText: 'Reject',
-        //             confirmBtnColor: Colors.teal,
-        //             title: 'Request',
-        //             autoCloseDuration: Duration(seconds: 60));
-        //       }
-        //     }
-        //   });
-        // }
       },
       builder: (context, state) {
-        // LocationCubit.get(context).updatingTheContainerBooleanByUser(uid: uId);
-        // LocationCubit.get(context).updatingTheButtonsBooleanByUser(uid:uId);
+        LocationCubit.get(context).updatingTheContainerBooleanByUser(uid: uId);
+        LocationCubit.get(context).updatingTheButtonsBooleanByUser(uid:uId);
         var cubit = LocationCubit.get(context);
 
         print('uId $uId');
@@ -349,7 +225,7 @@ class ProviderMapScreen extends StatelessWidget {
                                 ),
                                 DefaultTextStyle(style: const TextStyle(
                                     fontSize: 17, fontWeight: FontWeight.bold,color: Colors.black),child: Text(
-                                  'Winch',
+                                  'JumpStart',
                                 ),
                                 ),
                               ],
@@ -373,7 +249,7 @@ class ProviderMapScreen extends StatelessWidget {
                                           type: QuickAlertType.success,
                                           widget: Column(children: const [Center(child: Text('Cash to be collected in Egyptian pounds is')),
                                             SizedBox(height: 5,),
-                                            Text('120',style: TextStyle(fontSize: 25,color: Colors.green,fontWeight: FontWeight.bold),)
+                                            Text('90',style: TextStyle(fontSize: 25,color: Colors.green,fontWeight: FontWeight.bold),)
                                           ],),
                                           onConfirmBtnTap: (){
                                             Navigator.pop(context);
@@ -681,8 +557,9 @@ class ProviderMapScreen extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.teal),
                             onPressed: () async {
-                              var snap =await FirebaseFirestore.instance.collection('user').doc('alaaa@mail.com').get();
-                              QuickAlert.show(
+                              var snap =await FirebaseFirestore.instance.collection('user').doc('Salma@gmail.com').get();
+                              showToast("Searching for nearby requests");
+    Timer(Duration(seconds: 3), () {QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.confirm,
                                   widget: Column(
@@ -782,7 +659,7 @@ class ProviderMapScreen extends StatelessWidget {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            'Winch',
+                                            'JumpStart',
                                             style: TextStyle(
                                                 fontSize: 17, fontWeight: FontWeight.bold),
                                           ),
@@ -791,7 +668,7 @@ class ProviderMapScreen extends StatelessWidget {
                                     ],
                                   ),
                                   onConfirmBtnTap: () async{
-                                    LocationCubit.get(context).GettingUserData(uid: 'alaaa@mail.com');
+                                    LocationCubit.get(context).GettingUserData(uid: 'Salma@gmail.com');
                                     LocationCubit.get(context).isDataContainerShowen();
                                     LocationCubit.get(context).changingDataInFireStore(uid: uId);
                                     LocationCubit.get(context).isServiceButtonsShowen();
@@ -803,6 +680,7 @@ class ProviderMapScreen extends StatelessWidget {
                                   confirmBtnColor: Colors.teal,
                                   title: 'Request',
                               );
+    });
                               // providersUid.add(uId!);
                             },
                             child: const Text("Ready")),
